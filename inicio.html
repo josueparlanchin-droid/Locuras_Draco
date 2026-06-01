@@ -15,6 +15,15 @@
     </div>
 
     <div class="contenedor-principal-inicio">
+
+        <!-- Izquierda: Slider animado de viñetas -->
+        <aside class="panel-slider-izquierdo">
+            <h2 class="titulo-slider">Adelantos Exclusivos</h2>
+            <div class="contenedor-carrusel">
+                <!-- Ponemos la primera imagen por defecto -->
+                <img id="imagen-slider" src="WhatsApp Image 2026-05-31 at 10.00.55 PM (1).jpeg" alt="Viñeta de Locuras Draco">
+            </div>
+        </aside>
         
         <header class="cabecera-bienvenida">
             <h1>!!Bienvenido al Universo de Locuras Draco!!</h1>
@@ -67,8 +76,10 @@
     </div>
 
     <!-- Script para cargar tu perfil automáticamente -->
+<!-- Script para cargar tu perfil y animar el slider -->
     <script>
         document.addEventListener("DOMContentLoaded", () => {
+            // 1. Lógica para cargar el perfil del usuario
             const nombre = localStorage.getItem('dracoNombre');
             const avatar = localStorage.getItem('dracoAvatar');
             
@@ -76,7 +87,29 @@
                 document.getElementById('nombre-usuario-display').textContent = nombre;
                 document.getElementById('avatar-usuario-display').src = avatar;
             }
+
+            // 2. Lógica del Slider Automático
+            // Aquí pones los nombres exactos de todas las imágenes que me pasaste
+            const imagenesSlider = [
+                "WhatsApp Image 2026-05-31 at 10.00.55 PM (1).jpeg",
+                "WhatsApp Image 2026-05-31 at 10.00.55 PM.jpeg"
+            ];
+            
+            let indiceActual = 0;
+            const imgElement = document.getElementById('imagen-slider');
+
+            // Esta función se repetirá cada 4 segundos (4000 milisegundos)
+            setInterval(() => {
+                // Primero desvanecemos la imagen actual
+                imgElement.style.opacity = 0;
+                
+                // Esperamos medio segundo a que desaparezca y la cambiamos
+                setTimeout(() => {
+                    indiceActual = (indiceActual + 1) % imagenesSlider.length;
+                    imgElement.src = imagenesSlider[indiceActual];
+                    // Volvemos a hacerla visible
+                    imgElement.style.opacity = 1;
+                }, 500); 
+            }, 4000); 
         });
     </script>
-</body>
-</html>

@@ -308,3 +308,43 @@ select {
     object-fit: cover;
     border: 2px solid white;
 }
+
+/* =========================================
+   PANEL IZQUIERDO (SLIDER DE IMÁGENES)
+   ========================================= */
+.panel-slider-izquierdo {
+    position: absolute;
+    left: -280px;
+    top: 100px; /* La misma altura para que quede alineado con el chat */
+    width: 450px;
+    text-align: center;
+}
+
+.titulo-slider {
+    color: #ffe600;
+    font-size: 1.2rem;
+    margin-bottom: 15px;
+    border-bottom: 2px solid #ffd000;
+    padding-bottom: 5px;
+}
+
+.contenedor-carrusel {
+    background-color: #16213e;
+    padding: 10px;
+    border-radius: 10px;
+    border: 1px solid #2a3a5c;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 200px; /* Espacio reservado para que no salte la pantalla */
+}
+
+#imagen-slider {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+    border: 2px solid #000000;
+    /* Esta línea hace que la imagen aparezca y desaparezca suavemente */
+    transition: opacity 0.5s ease-in-out; 
+}
