@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat con Melodie - Locuras Draco</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="cuerpo-chat">
+
+    <div class="perfil-usuario-top">
+        <span id="nombre-usuario-display">Cargando...</span>
+        <img id="avatar-usuario-display" src="" alt="Tu Perfil">
+    </div>
+
+    <div class="contenedor-app-chat">
+        
+        <div class="cabecera-chat">
+            <button onclick="window.location.href='inicio.html'" class="btn-volver">🔙 Volver al Inicio</button>
+            <h2>Chateando con Melodie 🎤</h2>
+        </div>
+
+        <div class="zona-mensajes" id="caja-mensajes"></div>
+
+        <div class="zona-opciones oculta" id="caja-opciones">
+            <button class="btn-opcion" id="opcion-1"></button>
+            <button class="btn-opcion" id="opcion-2"></button>
+            <button class="btn-opcion" id="opcion-3"></button>
+        </div>
+
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            // 1. Cargar el perfil
+            const nombreCompleto = localStorage.getItem('dracoNombre') || "Invitado";
+            const avatar = localStorage.getItem('dracoAvatar');
+            
+            // Extraer SOLO el primer nombre (cortamos por el primer espacio)
+            const primerNombre = nombreCompleto.split(' ')[0];
+
+            if (nombreCompleto && avatar) {
+                document.getElementById('nombre-usuario-display').textContent = nombreCompleto;
+                document.getElementById('avatar-usuario-display').src = avatar;
+            }
+
+            const cajaMensajes = document.getElementById('caja-mensajes');
+            const cajaOpciones = document.getElementById('caja-opciones');
+
+            // 2. Función para crear el mensaje con efecto de aparición
+            function agregarMensajeMelodie(imagen, texto) {
+                const divMensaje = document.createElement('div');
+                divMensaje.classList.add('mensaje-personaje', 'animacion-aparecer');
+                
+                divMensaje.innerHTML = `
+                    <img src="${imagen}" alt="Melodie" class="avatar-mensaje">
+                    <div class="burbuja-personaje">
+                        <p>${texto}</p>
+                    </div>
+                `;
+                cajaMensajes.appendChild(divMensaje);
+                cajaMensajes.scrollTop = cajaMensajes.scrollHeight; // Auto-bajar la pantalla
+            }
+
+            // 3. Secuencia de la conversación (Tiempos en milisegundos)
+            
+            // Aparece de inmediato
+            setTimeout(() => {
+                agregarMensajeMelodie("Melodie_encantada.jpeg", "!!~AY UN GUSTO LINDO!!. Me llamo Melodie");
+            }, 300);
+
+            // Aparece a los 2.5 segundos
+            setTimeout(() => {
+                agregarMensajeMelodie("melodie_preocupada.jpeg", "Aunque Locuras Draco y sus amigos me llaman Melodie Aesthetic o Coreana pero... *bosteza*");
+            }, 2500);
+
+            // Aparece a los 5 segundos
+            setTimeout(() => {
+                agregarMensajeMelodie("melodie_normal.jpeg", "Y bien lindo, ¿qué quieres saber de mí?");
+                
+                // Mostrar las opciones del usuario 1 segundo después del último mensaje
+                setTimeout(() => {
+                    document.getElementById('opcion-1').innerHTML = `<i>*Sonrojado*</i> E-eh... sí, hola Melodie. Mucho gusto, me llamo <b>${primerNombre}</b> y quería saber un poco de tus gustos musicales, jeje. Si no te molesta, claro.`;
+                    
+                    document.getElementById('opcion-2').innerHTML = `<i>*La mira con admiración*</i> ¡¡Melodie, un gusto!! Me llamo <b>${primerNombre}</b> y, bueno... quería saber si podríamos tener una pequeña cita para comer.`;
+                    
+                    document.getElementById('opcion-3').innerHTML = `<i>*Un poco nervioso*</i> Hola Melodie, mucho gusto. Me llamo <b>${primerNombre}</b> y quería saber más cosas sobre ti... si no te molesta.`;
+                    
+                    cajaOpciones.classList.remove('oculta');
+                    cajaMensajes.scrollTop = cajaMensajes.scrollHeight;
+                }, 1000);
+
+            }, 5000);
+        });
+    </script>
+</body>
+</html>

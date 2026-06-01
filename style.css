@@ -379,3 +379,165 @@ select {
     text-align: justify; /* Alinea el texto derechito por ambos lados */
     line-height: 1.5; /* Espacio entre líneas para que sea fácil de leer */
 }
+
+/* =========================================
+   4. ESTILOS DE LA PANTALLA DE CHAT
+   ========================================= */
+.cuerpo-chat {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.contenedor-app-chat {
+    width: 100%;
+    max-width: 700px;
+    height: 80vh;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+    border-radius: 15px;
+    margin-top: 50px;
+}
+
+/* Cabecera del chat */
+.cabecera-chat {
+    background-color: #e94560;
+    padding: 15px 25px;
+    border-radius: 15px 15px 0 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.cabecera-chat h2 {
+    color: white;
+    margin: 0;
+    font-size: 1.3rem;
+    text-shadow: 0 2px 5px rgba(0,0,0,0.3);
+}
+
+.btn-volver {
+    background-color: #16213e;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.btn-volver:hover {
+    background-color: #0f172a;
+}
+
+/* Zona donde van los mensajes */
+.zona-mensajes {
+    flex: 1; /* Esto hace que ocupe todo el espacio disponible */
+    background-color: #0f172a;
+    padding: 25px;
+    overflow-y: auto; /* Permite hacer scroll hacia abajo */
+    display: flex;
+    flex-direction: column;
+    gap: 20px; /* Separación entre mensaje y mensaje */
+    border-left: 2px solid #3a4a6b;
+    border-right: 2px solid #3a4a6b;
+}
+
+/* Mensaje que te manda el personaje (Melodie) */
+.mensaje-personaje {
+    display: flex;
+    align-items: flex-start;
+    gap: 15px;
+    max-width: 80%; /* Para que el mensaje no cruce toda la pantalla */
+}
+
+/* La fotito pequeña al lado del mensaje */
+.avatar-mensaje {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #e94560;
+    background-color: white;
+}
+
+/* La burbuja de texto */
+.burbuja-personaje {
+    background-color: #16213e;
+    padding: 15px 20px;
+    border-radius: 0 20px 20px 20px; /* Punta arriba a la izquierda */
+    color: white;
+    border: 1px solid #2a3a5c;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+}
+
+.burbuja-personaje p {
+    margin: 0;
+    font-size: 1.05rem;
+    line-height: 1.4;
+}
+
+/* =========================================
+   ANIMACIÓN DE MENSAJES Y BOTONES DE DECISIÓN
+   ========================================= */
+
+/* Magia para que los mensajes aparezcan saltando suavemente */
+.animacion-aparecer {
+    opacity: 0;
+    transform: translateY(20px) scale(0.95);
+    animation: aparecerMensaje 0.4s ease-out forwards;
+}
+
+@keyframes aparecerMensaje {
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* Contenedor de las 3 opciones */
+.zona-opciones {
+    background-color: #16213e;
+    padding: 15px;
+    border-radius: 0 0 15px 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    border: 2px solid #3a4a6b;
+    border-top: none;
+}
+
+.zona-opciones.oculta {
+    display: none;
+}
+
+/* Diseño de los botones de interacción */
+.btn-opcion {
+    background-color: #0f172a;
+    color: #e94560;
+    border: 1px solid #e94560;
+    padding: 12px 15px;
+    border-radius: 10px;
+    cursor: pointer;
+    text-align: left;
+    font-size: 0.95rem;
+    transition: all 0.3s;
+    line-height: 1.4;
+}
+
+.btn-opcion:hover {
+    background-color: #e94560;
+    color: white;
+}
+
+/* Destacar el nombre del usuario dentro del botón */
+.btn-opcion b {
+    color: white;
+}
+.btn-opcion:hover b {
+    color: #0f172a;
+}
