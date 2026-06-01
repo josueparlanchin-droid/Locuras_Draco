@@ -315,7 +315,7 @@ select {
 .panel-slider-izquierdo {
     position: absolute;
     left: -280px;
-    top: 100px; /* La misma altura para que quede alineado con el chat */
+    top: 100px;
     width: 450px;
     text-align: center;
 }
@@ -345,7 +345,6 @@ select {
     height: auto;
     border-radius: 8px;
     border: 2px solid #000000;
-    /* Esta línea hace que la imagen aparezca y desaparezca suavemente */
     transition: opacity 0.5s ease-in-out; 
 }
 
@@ -391,9 +390,10 @@ select {
     margin: 0;
 }
 
+/* 1. Hacemos el cuadro principal más ancho (cambiamos max-width de 700px a 950px) */
 .contenedor-app-chat {
     width: 100%;
-    max-width: 700px;
+    max-width: 950px; /* <-- Aquí está la magia del ancho */
     height: 80vh;
     display: flex;
     flex-direction: column;
@@ -455,10 +455,10 @@ select {
     max-width: 80%; /* Para que el mensaje no cruce toda la pantalla */
 }
 
-/* La fotito pequeña al lado del mensaje */
+/* 2. Agrandamos la imagen del personaje (cambiamos width y height de 60px a 90px) */
 .avatar-mensaje {
-    width: 60px;
-    height: 60px;
+    width: 90px; /* <-- Imagen más grande */
+    height: 90px; /* <-- Imagen más grande */
     border-radius: 50%;
     object-fit: cover;
     border: 2px solid #e94560;
@@ -475,10 +475,11 @@ select {
     box-shadow: 0 4px 10px rgba(0,0,0,0.3);
 }
 
+/* 3. Agrandamos un pelín la letra del chat para que acompañe el nuevo tamaño de foto */
 .burbuja-personaje p {
     margin: 0;
-    font-size: 1.05rem;
-    line-height: 1.4;
+    font-size: 1.15rem; /* <-- Letra un poco más grande y legible */
+    line-height: 1.5;
 }
 
 /* =========================================
