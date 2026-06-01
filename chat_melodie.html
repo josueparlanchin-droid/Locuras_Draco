@@ -104,36 +104,54 @@
                     
                     cajaOpciones.classList.remove('oculta');
 
-                    // ==========================================
-                    // ¿QUÉ PASA CUANDO EL USUARIO ELIGE LA OPCIÓN 1?
+// ==========================================
+                    // ¿QUÉ PASA CUANDO EL USUARIO ELIGE LA OPCIÓN 1? (PRIMERA RONDA)
                     // ==========================================
                     btn1.onclick = function() {
-                        // 1. Ocultamos los botones mientras Melodie habla
                         cajaOpciones.classList.add('oculta');
                         
-                        // 2. Melodie responde apuntando
                         actualizarEscena("Melodie_apuntando.jpeg", `¡Claro, <b>${primerNombre}</b>! Yo no tengo problema en hablarle a mis fans sobre mis gustos musicales.`);
                         
-                        // 3. A los 4 segundos, Melodie se pone interesada
                         setTimeout(() => {
                             actualizarEscena("Melodie_interesada.jpeg", "Bueno, aunque la mayoría ya sabe cuáles son mis gustos musicales favoritos, jiji... Pero bueno, cariño, ¿qué te gustaría saber?");
                             
-                            // 4. Mostramos las nuevas opciones (ahora solo son 2)
                             setTimeout(() => {
                                 btn1.innerHTML = `Yo no lo sé, Melodie, por eso pregunto. ¿Cuál es tu género musical favorito? jeje.`;
                                 btn2.innerHTML = `Déjame adivinar... te gusta el K-pop, ¿verdad?`;
                                 
-                                // Ocultamos el tercer botón porque en esta parte solo hay 2 opciones
-                                btn3.style.display = "none"; 
+                                btn3.style.display = "none"; // Ocultamos el 3er botón
                                 
-                                // Limpiamos la acción anterior para programarla en el futuro
-                                btn1.onclick = function() { console.log("Próximamente Opción 1..."); };
-                                btn2.onclick = function() { console.log("Próximamente Opción 2..."); };
+                                // ==========================================
+                                // ¿QUÉ PASA CUANDO ELIGE LA OPCIÓN 1 EN LA SEGUNDA RONDA?
+                                // ==========================================
+                                btn1.onclick = function() {
+                                    cajaOpciones.classList.add('oculta');
+                                    
+                                    // 1. Melodie se indigna inmediatamente
+                                    // OJO: Cambia el nombre aquí por el de tu PNG sin fondo
+                                    actualizarEscena("Melodie_sorprendida.jpeg", "¡¿Cómo es posible que sepas mi nombre pero no sepas mi género musical favorito, si es con el que todos me han estado escuchando a lo largo de mi carrera?!");
+                                    
+                                    // 2. A los 5 segundos, se pone desanimada
+                                    setTimeout(() => {
+                                        // OJO: Cambia el nombre aquí por el de tu PNG sin fondo
+                                        actualizarEscena("Melodie_desanimada.jpeg", "<i>*Lo mira un poco desanimada*</i> Mi género musical favorito es el K-pop.");
+                                        
+                                        // 3. A los 4 segundos (9 seg en total), dice la última frase con la misma imagen
+                                        setTimeout(() => {
+                                            textoDialogo.innerHTML = "Pero de nada me sirve decírtelo ahora, si apenas conoces mi nombre. Vaya, deberás conocerme más de lo habitual... aunque no sé si darte el tiempo, ya que tengo cosas que hacer. <i>*Un poco desanimada*</i>";
+                                            // Nota: Aquí solo cambié el texto (textoDialogo.innerHTML) para no hacer el parpadeo de la imagen, ya que es la misma pose.
+                                        }, 4000);
+
+                                    }, 5000);
+                                };
+
+                                // Dejamos la opción 2 pendiente para después
+                                btn2.onclick = function() { console.log("Próximamente K-Pop..."); };
 
                                 cajaOpciones.classList.remove('oculta');
                             }, 1000);
 
-                        }, 4000); // Melodie tarda 4 segundos en cambiar a la fase interesada
+                        }, 4000); 
                     };
 
                     // Acciones temporales para los botones 2 y 3 originales (para que no den error)
