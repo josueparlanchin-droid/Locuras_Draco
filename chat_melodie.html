@@ -6,79 +6,93 @@
     <title>Chat con Melodie - Locuras Draco</title>
     <link rel="stylesheet" href="style.css">
 </head>
-<body class="cuerpo-chat">
+<body class="cuerpo-vn">
 
     <div class="perfil-usuario-top">
         <span id="nombre-usuario-display">Cargando...</span>
         <img id="avatar-usuario-display" src="" alt="Tu Perfil">
     </div>
 
-    <div class="contenedor-app-chat">
+    <div class="contenedor-app-vn">
         
         <div class="cabecera-chat">
             <button onclick="window.location.href='inicio.html'" class="btn-volver">🔙 Volver al Inicio</button>
-            <h2>Chateando con Melodie 🎤</h2>
+            <h2>Hablando con Melodie 🎤</h2>
         </div>
 
-        <div class="zona-mensajes" id="caja-mensajes"></div>
+        <!-- El Escenario Central -->
+        <div class="escena-vn">
+            
+            <!-- Personaje en grande al centro -->
+            <img id="sprite-personaje" src="Melodie_encantada.png" alt="Melodie" class="sprite-centro">
 
-        <div class="zona-opciones oculta" id="caja-opciones">
-            <button class="btn-opcion" id="opcion-1"></button>
-            <button class="btn-opcion" id="opcion-2"></button>
-            <button class="btn-opcion" id="opcion-3"></button>
+            <!-- Caja de Diálogo Estilo Brawl Stars -->
+            <div class="caja-dialogo-vn" id="caja-dialogo">
+                <img id="icono-dialogo" src="Melodie_encantada.png" alt="Icono" class="icono-mini-dialogo">
+                <p id="texto-dialogo">...</p>
+            </div>
+
+            <!-- Opciones del jugador -->
+            <div class="zona-opciones-vn oculta" id="caja-opciones">
+                <button class="btn-opcion-vn" id="opcion-1"></button>
+                <button class="btn-opcion-vn" id="opcion-2"></button>
+                <button class="btn-opcion-vn" id="opcion-3"></button>
+            </div>
+
         </div>
 
     </div>
 
     <script>
         document.addEventListener("DOMContentLoaded", () => {
-            // 1. Cargar el perfil
+            // Cargar el perfil del usuario
             const nombreCompleto = localStorage.getItem('dracoNombre') || "Invitado";
             const avatar = localStorage.getItem('dracoAvatar');
-            
-            // Extraer SOLO el primer nombre (cortamos por el primer espacio)
-            const primerNombre = nombreCompleto.split(' ')[0];
+            const primerNombre = nombreCompleto.split(' ')[0]; // Solo el primer nombre
 
             if (nombreCompleto && avatar) {
                 document.getElementById('nombre-usuario-display').textContent = nombreCompleto;
                 document.getElementById('avatar-usuario-display').src = avatar;
             }
 
-            const cajaMensajes = document.getElementById('caja-mensajes');
+            // Elementos de la pantalla
+            const spritePersonaje = document.getElementById('sprite-personaje');
+            const iconoDialogo = document.getElementById('icono-dialogo');
+            const textoDialogo = document.getElementById('texto-dialogo');
             const cajaOpciones = document.getElementById('caja-opciones');
 
-            // 2. Función para crear el mensaje con efecto de aparición
-            function agregarMensajeMelodie(imagen, texto) {
-                const divMensaje = document.createElement('div');
-                divMensaje.classList.add('mensaje-personaje', 'animacion-aparecer');
+            // Función mágica para actualizar la escena (cambia la foto y el texto en el mismo lugar)
+            function actualizarEscena(imagen, texto) {
+                // Hacemos que la imagen se desvanezca rápido
+                spritePersonaje.style.opacity = 0;
                 
-                divMensaje.innerHTML = `
-                    <img src="${imagen}" alt="Melodie" class="avatar-mensaje">
-                    <div class="burbuja-personaje">
-                        <p>${texto}</p>
-                    </div>
-                `;
-                cajaMensajes.appendChild(divMensaje);
-                cajaMensajes.scrollTop = cajaMensajes.scrollHeight; // Auto-bajar la pantalla
+                setTimeout(() => {
+                    // Cambiamos la foto gigante, el icono pequeñito y el texto
+                    spritePersonaje.src = imagen;
+                    iconoDialogo.src = imagen;
+                    textoDialogo.innerHTML = texto;
+                    // Hacemos que vuelva a aparecer
+                    spritePersonaje.style.opacity = 1;
+                }, 200);
             }
 
-            // 3. Secuencia de la conversación (Tiempos en milisegundos)
+            // --- LA SECUENCIA DE DIÁLOGOS ---
             
-            // Aparece de inmediato
+            // 1. Inicia inmediatamente
             setTimeout(() => {
-                agregarMensajeMelodie("Melodie_encantada.jpeg", "!!~AY UN GUSTO LINDO!!. Me llamo Melodie");
+                actualizarEscena("Melodie_encantada.png", "!!~AY UN GUSTO LINDO!!. Me llamo Melodie");
             }, 300);
 
-            // Aparece a los 2.5 segundos
+            // 2. A los 3.5 segundos cambia a la segunda frase
             setTimeout(() => {
-                agregarMensajeMelodie("melodie_preocupada.jpeg", "Aunque Locuras Draco y sus amigos me llaman Melodie Aesthetic o Coreana pero... *bosteza*");
-            }, 2500);
+                actualizarEscena("Melodie_preocupada.png", "Aunque Locuras Draco y sus amigos me llaman Melodie Aesthetic o Coreana pero... *bosteza*");
+            }, 3500);
 
-            // Aparece a los 5 segundos
+            // 3. A los 7 segundos cambia a la tercera frase y muestra las opciones
             setTimeout(() => {
-                agregarMensajeMelodie("melodie_normal.jpeg", "Y bien lindo, ¿qué quieres saber de mí?");
+                actualizarEscena("Melodie_normal.png", "Y bien lindo, ¿qué quieres saber de mí?");
                 
-                // Mostrar las opciones del usuario 1 segundo después del último mensaje
+                // Mostramos los botones un segundito después
                 setTimeout(() => {
                     document.getElementById('opcion-1').innerHTML = `<i>*Sonrojado*</i> E-eh... sí, hola Melodie. Mucho gusto, me llamo <b>${primerNombre}</b> y quería saber un poco de tus gustos musicales, jeje. Si no te molesta, claro.`;
                     
@@ -87,10 +101,9 @@
                     document.getElementById('opcion-3').innerHTML = `<i>*Un poco nervioso*</i> Hola Melodie, mucho gusto. Me llamo <b>${primerNombre}</b> y quería saber más cosas sobre ti... si no te molesta.`;
                     
                     cajaOpciones.classList.remove('oculta');
-                    cajaMensajes.scrollTop = cajaMensajes.scrollHeight;
                 }, 1000);
 
-            }, 5000);
+            }, 7500);
         });
     </script>
 </body>
