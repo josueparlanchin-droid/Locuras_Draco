@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro - Locuras Draco</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="contenedor-perfil">
+        <h1>Crea tu Perfil</h1>
+        <p class="subtitulo">Únete para leer los cómics de Locuras Draco</p>
+        
+        <form id="formulario-registro">
+            <div class="grupo-input">
+                <label for="nombreCompleto">Nombre y Apellido:</label>
+                <input type="text" id="nombreCompleto" required placeholder="Ej: Colt Enmascarado">
+            </div>
+
+            <div class="grupo-input">
+                <label for="correo">Correo Electrónico:</label>
+                <input type="email" id="correo" required placeholder="tu@correo.com">
+            </div>
+
+            <div class="grupo-input">
+                <label>Elige tu foto de perfil:</label>
+                <div class="opciones-avatar" id="contenedor-avatares">
+                    <img src="WhatsApp Image 2026-05-31 at 8.29.41 PM.jpeg" alt="Team L.Draco" class="avatar-opcion" data-avatar="Locuras Draco">
+                    <img src="WhatsApp Image 2026-05-31 at 8.29.41 PM (1).jpeg" alt="Team Melodie" class="avatar-opcion" data-avatar="Melodie Aesthetic">
+                </div>
+                <input type="hidden" id="avatarSeleccionado" value="">
+            </div>
+
+            <button type="submit" class="btn-crear">Crear Perfil</button>
+        </form>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
