@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Universo Locuras Draco</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="cuerpo-inicio">
+    
+    <!-- Tu Perfil de Usuario arriba a la derecha -->
+    <div class="perfil-usuario-top">
+        <span id="nombre-usuario-display">Cargando...</span>
+        <img id="avatar-usuario-display" src="" alt="Tu Perfil">
+    </div>
+
+    <div class="contenedor-principal-inicio">
+        
+        <header class="cabecera-bienvenida">
+            <h1>!!Bienvenido al Universo de Locuras Draco!!</h1>
+            <p>espero que me sigas a esta gran aventura mi Pana &lt;3</p>
+        </header>
+
+        <!-- Centro: Las viñetas de las temporadas -->
+        <main class="contenedor-temporadas-centro">
+            <div class="tarjeta-temporada">
+                <div class="portada-temporada"><span>T1</span></div>
+                <h2>Temporada 1</h2>
+                <button class="btn-leer">Leer ahora</button>
+            </div>
+
+            <div class="tarjeta-temporada">
+                <div class="portada-temporada"><span>T2</span></div>
+                <h2>Temporada 2</h2>
+                <button class="btn-leer">Próximamente</button>
+            </div>
+        </main>
+
+        <!-- Derecha: El panel de chats en cuadrícula -->
+        <aside class="panel-chat-cuadricula">
+            <h2 class="titulo-chats">Chatear con los personajes</h2>
+            
+            <div class="grilla-chats">
+                <!-- Chat 1: Melodie -->
+                <div class="tarjeta-chat-mini">
+                    <img src="Melodie_comentario.png" alt="Perfil Melodie" class="foto-cuadrada-mini">
+                    <h3>Melodie</h3>
+                    <button class="btn-chat-mini">Chat</button>
+                </div>
+
+                <!-- Chat 2: Locuras Draco -->
+                <div class="tarjeta-chat-mini">
+                    <img src="WhatsApp Image 2026-05-31 at 9.21.39 PM.jpeg" alt="Perfil Locuras Draco" class="foto-cuadrada-mini">
+                    <h3>Draco</h3>
+                    <button class="btn-chat-mini">Chat</button>
+                </div>
+
+                <!-- Chat 3: Espacio para el próximo personaje -->
+                <div class="tarjeta-chat-mini">
+                    <div class="foto-cuadrada-mini placeholder-personaje">?</div>
+                    <h3>Próximo</h3>
+                    <button class="btn-chat-mini" disabled>Chat</button>
+                </div>
+            </div>
+        </aside>
+        
+    </div>
+
+    <!-- Script para cargar tu perfil automáticamente -->
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const nombre = localStorage.getItem('dracoNombre');
+            const avatar = localStorage.getItem('dracoAvatar');
+            
+            if (nombre && avatar) {
+                document.getElementById('nombre-usuario-display').textContent = nombre;
+                document.getElementById('avatar-usuario-display').src = avatar;
+            }
+        });
+    </script>
+</body>
+</html>

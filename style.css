@@ -1,3 +1,6 @@
+/* =========================================
+   1. ESTILOS GENERALES Y FORMULARIO DE REGISTRO
+   ========================================= */
 body {
     background-color: #1a1a2e;
     color: white;
@@ -55,32 +58,35 @@ h1 {
     outline: none;
 }
 
-.opciones-avatar {
+select {
+    width: 100%;
+    padding: 12px;
+    border-radius: 8px;
+    border: none;
+    background-color: #0f172a;
+    color: white;
+    outline: none;
+    font-family: inherit;
+    cursor: pointer;
+}
+
+.vista-previa-oculta {
+    display: none !important;
+}
+
+#vista-previa-avatar {
+    margin-top: 15px;
     display: flex;
     justify-content: center;
-    gap: 20px;
-    margin-top: 10px;
 }
 
-.avatar-opcion {
-    width: 90px;
-    height: 90px;
+#imagen-avatar {
+    width: 120px;
+    height: 120px;
     border-radius: 50%;
     object-fit: cover;
-    cursor: pointer;
-    border: 4px solid transparent;
-    transition: transform 0.2s, border-color 0.2s;
-    background-color: #000;
-}
-
-.avatar-opcion:hover {
-    transform: scale(1.1);
-}
-
-.avatar-opcion.seleccionada {
-    border-color: #e94560;
-    box-shadow: 0 0 15px #e94560;
-    transform: scale(1.1);
+    border: 3px solid #e94560;
+    box-shadow: 0 0 15px rgba(233, 69, 96, 0.4);
 }
 
 .btn-crear {
@@ -99,4 +105,206 @@ h1 {
 
 .btn-crear:hover {
     background-color: #d1304b;
+}
+
+/* =========================================
+   2. ESTILOS DE LA PÁGINA DE INICIO (CÓMICS Y CHAT)
+   ========================================= */
+
+/* Quitar el centrado total solo en la página de inicio */
+.cuerpo-inicio {
+    display: block;
+    height: auto;
+    padding-top: 50px;
+}
+
+.cabecera-bienvenida {
+    text-align: center;
+}
+
+.cabecera-bienvenida h1 {
+    color: #e94560;
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+    text-shadow: 0 0 10px rgba(233, 69, 96, 0.5);
+}
+
+.cabecera-bienvenida p {
+    font-size: 1.2rem;
+    color: #a0a0a0;
+    margin-bottom: 50px;
+}
+
+/* Nuevo contenedor principal para posicionar bien el chat */
+.contenedor-principal-inicio {
+    position: relative;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding-bottom: 50px;
+}
+
+/* Temporadas centradas a la perfección */
+.contenedor-temporadas-centro {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    margin-top: 40px;
+}
+
+.tarjeta-temporada {
+    background-color: #16213e;
+    border-radius: 15px;
+    padding: 20px;
+    width: 260px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    text-align: center;
+}
+
+.tarjeta-temporada:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 40px rgba(233, 69, 96, 0.3);
+}
+
+.portada-temporada {
+    height: 350px;
+    background-color: #0f172a;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 4rem;
+    font-weight: bold;
+    color: rgba(255,255,255,0.05);
+    margin-bottom: 20px;
+    border: 2px dashed #3a4a6b;
+}
+
+.tarjeta-temporada h2 {
+    margin: 0 0 15px 0;
+    color: white;
+    font-size: 1.5rem;
+}
+
+.btn-leer {
+    background-color: #e94560;
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    width: 100%;
+    transition: background-color 0.3s;
+}
+
+.btn-leer:hover {
+    background-color: #d1304b;
+}
+
+/* Panel de chat flotando a la derecha (Grilla 3x3) */
+.panel-chat-cuadricula {
+    position: absolute;
+    right: -250px;
+    top: 100px;
+    width: 360px;
+    text-align: center;
+}
+
+.titulo-chats {
+    color: #e94560;
+    font-size: 1.2rem;
+    margin-bottom: 15px;
+    border-bottom: 2px solid #e94560;
+    padding-bottom: 5px;
+}
+
+.grilla-chats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+}
+
+.tarjeta-chat-mini {
+    background-color: #16213e;
+    padding: 10px 5px;
+    border-radius: 10px;
+    border: 1px solid #2a3a5c;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.tarjeta-chat-mini h3 {
+    color: white;
+    font-size: 0.9rem;
+    margin: 8px 0;
+}
+
+.foto-cuadrada-mini {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border: 2px solid #e94560;
+    border-radius: 20px;
+    background-color: white;
+}
+
+.placeholder-personaje {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #0f172a;
+    color: #3a4a6b;
+    font-size: 2rem;
+    font-weight: bold;
+}
+
+.btn-chat-mini {
+    background-color: #0f172a;
+    color: #e94560;
+    border: 1px solid #e94560;
+    padding: 5px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    width: 90%;
+    transition: all 0.3s;
+}
+
+.btn-chat-mini:hover:not(:disabled) {
+    background-color: #e94560;
+    color: white;
+}
+
+/* =========================================
+   3. PERFIL DE USUARIO (ARRIBA DERECHA)
+   ========================================= */
+.perfil-usuario-top {
+    position: absolute;
+    top: 20px;
+    right: 30px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    background-color: #16213e;
+    padding: 8px 20px;
+    border-radius: 30px;
+    border: 2px solid #003cff;
+    box-shadow: 0 4px 15px rgba(233, 69, 96, 0.3);
+}
+
+.perfil-usuario-top span {
+    color: white;
+    font-weight: bold;
+    font-size: 1rem;
+}
+
+.perfil-usuario-top img {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid white;
 }
