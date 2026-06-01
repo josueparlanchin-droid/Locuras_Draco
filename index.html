@@ -22,18 +22,18 @@
                 <input type="email" id="correo" required placeholder="tu@correo.com">
             </div>
 
+            <!-- Selección de Avatar con Menú Desplegable -->
             <div class="grupo-input">
-                <label>Elige tu foto de perfil:</label>
-                <div class="opciones-avatar" id="contenedor-avatares">
-                    <img src="WhatsApp Image 2026-05-31 at 8.29.41 PM.jpeg" alt="Team L.Draco" class="avatar-opcion" data-avatar="Locuras Draco">
-                    <img src="WhatsApp Image 2026-05-31 at 8.29.41 PM (1).jpeg" alt="Team Melodie" class="avatar-opcion" data-avatar="Melodie Aesthetic">
+                <label for="selectorAvatar">Elige tu foto de perfil:</label>
+                <select id="selectorAvatar" required>
+                    <option value="" disabled selected>-- Haz clic aquí para elegir mi Pana --</option>
+                    <option value="WhatsApp Image 2026-05-31 at 8.29.41 PM.jpeg">Locuras Draco</option>
+                    <option value="WhatsApp Image 2026-05-31 at 8.29.41 PM (1).jpeg">Melodie Aesthetic</option>
+                </select>
+                <div id="vista-previa-avatar" class="vista-previa-oculta">
+                    <img id="imagen-avatar" src="" alt="Vista previa de tu Brawler">
                 </div>
-                <input type="hidden" id="avatarSeleccionado" value="">
             </div>
-
-            <button type="submit" class="btn-crear">Crear Perfil</button>
-        </form>
-    </div>
 
     <script src="script.js"></script>
 </body>
