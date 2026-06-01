@@ -76,7 +76,7 @@
                 }, 200);
             }
 
-// --- LA SECUENCIA DE DIÁLOGOS ---
+// --- LA SECUENCIA DE DIÁLOGOS INICIAL ---
             
             // 1. Inicia inmediatamente
             setTimeout(() => {
@@ -88,19 +88,58 @@
                 actualizarEscena("Melodie_Preocupada (2).jpeg", "Aunque Locuras Draco y sus amigos me llaman Melodie Aesthetic o Coreana pero... *bosteza*");
             }, 3500);
 
-            // 3. A los 7 segundos cambia a la tercera frase y muestra las opciones
+            // 3. A los 7 segundos cambia a la tercera frase y muestra las opciones iniciales
             setTimeout(() => {
                 actualizarEscena("Melodie_normal (2).jpeg", "Y bien lindo, ¿qué quieres saber de mí?");
                 
-                // Mostramos los botones un segundito después
+                // Mostramos los botones de la PRIMERA decisión
                 setTimeout(() => {
-                    document.getElementById('opcion-1').innerHTML = `<i>*Sonrojado*</i> E-eh... sí, hola Melodie. Mucho gusto, me llamo <b>${primerNombre}</b> y quería saber un poco de tus gustos musicales, jeje. Si no te molesta, claro.`;
-                    
-                    document.getElementById('opcion-2').innerHTML = `<i>*La mira con admiración*</i> ¡¡Melodie, un gusto!! Me llamo <b>${primerNombre}</b> y, bueno... quería saber si podríamos tener una pequeña cita para comer.`;
-                    
-                    document.getElementById('opcion-3').innerHTML = `<i>*Un poco nervioso*</i> Hola Melodie, mucho gusto. Me llamo <b>${primerNombre}</b> y quería saber más cosas sobre ti... si no te molesta.`;
+                    const btn1 = document.getElementById('opcion-1');
+                    const btn2 = document.getElementById('opcion-2');
+                    const btn3 = document.getElementById('opcion-3');
+
+                    btn1.innerHTML = `<i>*Sonrojado*</i> E-eh... sí, hola Melodie. Mucho gusto, me llamo <b>${primerNombre}</b> y quería saber un poco de tus gustos musicales, jeje. Si no te molesta, claro.`;
+                    btn2.innerHTML = `<i>*La mira con admiración*</i> ¡¡Melodie, un gusto!! Me llamo <b>${primerNombre}</b> y, bueno... quería saber si podríamos tener una pequeña cita para comer.`;
+                    btn3.innerHTML = `<i>*Un poco nervioso*</i> Hola Melodie, mucho gusto. Me llamo <b>${primerNombre}</b> y quería saber más cosas sobre ti... si no te molesta.`;
                     
                     cajaOpciones.classList.remove('oculta');
+
+                    // ==========================================
+                    // ¿QUÉ PASA CUANDO EL USUARIO ELIGE LA OPCIÓN 1?
+                    // ==========================================
+                    btn1.onclick = function() {
+                        // 1. Ocultamos los botones mientras Melodie habla
+                        cajaOpciones.classList.add('oculta');
+                        
+                        // 2. Melodie responde apuntando
+                        actualizarEscena("Melodie_apuntando.jpeg", `¡Claro, <b>${primerNombre}</b>! Yo no tengo problema en hablarle a mis fans sobre mis gustos musicales.`);
+                        
+                        // 3. A los 4 segundos, Melodie se pone interesada
+                        setTimeout(() => {
+                            actualizarEscena("Melodie_interesada.jpeg", "Bueno, aunque la mayoría ya sabe cuáles son mis gustos musicales favoritos, jiji... Pero bueno, cariño, ¿qué te gustaría saber?");
+                            
+                            // 4. Mostramos las nuevas opciones (ahora solo son 2)
+                            setTimeout(() => {
+                                btn1.innerHTML = `Yo no lo sé, Melodie, por eso pregunto. ¿Cuál es tu género musical favorito? jeje.`;
+                                btn2.innerHTML = `Déjame adivinar... te gusta el K-pop, ¿verdad?`;
+                                
+                                // Ocultamos el tercer botón porque en esta parte solo hay 2 opciones
+                                btn3.style.display = "none"; 
+                                
+                                // Limpiamos la acción anterior para programarla en el futuro
+                                btn1.onclick = function() { console.log("Próximamente Opción 1..."); };
+                                btn2.onclick = function() { console.log("Próximamente Opción 2..."); };
+
+                                cajaOpciones.classList.remove('oculta');
+                            }, 1000);
+
+                        }, 4000); // Melodie tarda 4 segundos en cambiar a la fase interesada
+                    };
+
+                    // Acciones temporales para los botones 2 y 3 originales (para que no den error)
+                    btn2.onclick = function() { alert("¡La ruta de la cita se está construyendo! Vuelve a intentar la Opción 1."); };
+                    btn3.onclick = function() { alert("¡La ruta de curiosidades se está construyendo! Vuelve a intentar la Opción 1."); };
+
                 }, 1000);
 
             }, 7500);
