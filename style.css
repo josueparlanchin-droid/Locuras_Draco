@@ -424,14 +424,15 @@ select {
     box-shadow: inset 0 0 100px rgba(0,0,0,0.5); 
 }
 
-/* La imagen gigante de Melodie */
+/* La imagen gigante de Melodie ajustada a cuerpo completo */
 .sprite-centro {
     position: absolute;
-    bottom: 220px; /* La subimos un poco para que la caja de texto no le tape la cara */
-    height: 65%; /* Súper grande */
-    max-height: 500px;
+    bottom: 0; /* La bajamos para que sus piernas queden ocultas por la caja de texto */
+    height: 100%; /* La hacemos mucho más alta */
+    max-height: 700px;
     object-fit: contain;
-    transition: opacity 0.3s ease-in-out; /* Efecto suave al cambiar de expresión */
+    object-position: bottom; /* Esto asegura que crezca desde abajo hacia arriba */
+    transition: opacity 0.3s ease-in-out; 
     z-index: 1;
 }
 
