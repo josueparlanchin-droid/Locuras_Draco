@@ -348,3 +348,34 @@ select {
     /* Esta línea hace que la imagen aparezca y desaparezca suavemente */
     transition: opacity 0.5s ease-in-out; 
 }
+
+/* =========================================
+   ESTILOS PARA LA PORTADA REAL Y DESCRIPCIÓN
+   ========================================= */
+
+/* Hacemos la tarjeta un poco más alta si tiene texto */
+.tarjeta-ampliada {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+/* Estilo para la imagen de portada real */
+.img-portada {
+    width: 100%;
+    height: 300px; /* Puedes subir o bajar este número si la quieres más grande */
+    object-fit: cover; /* Evita que Draco se vea estirado o aplastado */
+    object-position: top; /* Enfoca la parte de arriba de la imagen (la cara y el texto) */
+    border-radius: 10px;
+    margin-bottom: 15px;
+    border: 2px solid #3a4a6b;
+}
+
+/* Estilo para el párrafo de la historia */
+.descripcion-temporada {
+    font-size: 0.85rem;
+    color: #a0a0a0;
+    margin-bottom: 15px;
+    text-align: justify; /* Alinea el texto derechito por ambos lados */
+    line-height: 1.5; /* Espacio entre líneas para que sea fácil de leer */
+}
