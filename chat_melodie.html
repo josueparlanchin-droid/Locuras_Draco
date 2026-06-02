@@ -45,7 +45,7 @@
 
     </div>
 
-    <script>
+<script>
         document.addEventListener("DOMContentLoaded", () => {
             // Cargar el perfil del usuario (Usamos Draco como respaldo)
             const nombreCompleto = localStorage.getItem('dracoNombre') || "Draco";
@@ -77,7 +77,7 @@
                     iconoDialogo.src = imagen;
                     textoDialogo.innerHTML = texto;
                     spritePersonaje.style.opacity = 1;
-                }, 150); // Transición un poco más rápida para clics
+                }, 150); // Transición rápida para clics
             }
 
             // Función central que avanza la historia
@@ -110,7 +110,7 @@
 
             // Detectamos los clics en toda la pantalla
             document.body.addEventListener('click', (evento) => {
-                // Evitar avanzar si hacen clic en un botón, en las opciones, o en la barra de volver arriba
+                // Evitar avanzar si hacen clic en un botón, en las opciones, o en la barra superior
                 if (evento.target.tagName.toLowerCase() === 'button' || evento.target.closest('.zona-opciones-vn') || evento.target.closest('.cabecera-chat')) {
                     return;
                 }
@@ -144,8 +144,17 @@
                     btn3.style.display = "block";
 
                     btn1.onclick = () => { iniciarFinalRaro(); };
-                    btn2.onclick = () => { alert("¡Ruta en construcción!"); };
+                    btn2.onclick = () => { iniciarFase4_Opcion2(); }; // <-- AQUÍ CONECTAMOS LA NUEVA RUTA
                     btn3.onclick = () => { iniciarFinalMalo(); };
+                }
+                else if (fase === 4) {
+                    // Nuevas opciones para el ego de Melodie
+                    btn1.innerHTML = `Ay, Melodie, está bien, discúlpame, ahora lo sé... dijiste que tienes cosas que hacer, así que bueno, nos vemos para la próxima, cuídate.`;
+                    btn2.innerHTML = `Vaya, siendo una de las idols más famosas, sí que tienes el ego por las nubes al igual que la Canon. Así que chao, loca.`;
+                    btn3.style.display = "none";
+
+                    btn1.onclick = () => { alert("¡Ruta de disculpa en construcción!"); };
+                    btn2.onclick = () => { iniciarFinalPeor(); }; // <-- AQUÍ CONECTAMOS EL PEOR FINAL
                 }
 
                 cajaOpciones.classList.remove('oculta');
@@ -161,7 +170,7 @@
                     { img: "Melodie_Preocupada (2).jpeg", txt: "Aunque Locuras Draco y sus amigos me llaman Melodie Aesthetic o Coreana pero... *bosteza*" },
                     { img: "Melodie_normal (2).jpeg", txt: "Y bien lindo, ¿qué quieres saber de mí?", showOptions: 1 }
                 ];
-                avanzarDialogo(); // Forzamos el primero para que no empiece en blanco
+                avanzarDialogo();
             }
 
             function iniciarFase2_Opcion1() {
@@ -185,13 +194,27 @@
                 avanzarDialogo();
             }
 
+            // === LA NUEVA RUTA DEL EGO ===
+            function iniciarFase4_Opcion2() {
+                cajaOpciones.classList.add('oculta');
+                esperandoOpciones = false;
+                colaDialogos = [
+                    { img: "TU_IMAGEN_MELODIE_OFENDIDA.png", txt: "Uy, sí, ¿cómo no desanimarme, cariño?" },
+                    { img: "TU_IMAGEN_MELODIE_ORGULLOSA.png", txt: "Soy una de las idols más famosas y más perfectas de este universo." },
+                    { img: "TU_IMAGEN_MELODIE_ENOJADA.png", txt: "Así que, ¿cómo no ofenderme por algo muy básico como no saber mi gusto musical?", showOptions: 4 }
+                ];
+                avanzarDialogo();
+            }
+
+            // === LOS FINALES ===
+
             function iniciarFinalRaro() {
                 cajaOpciones.classList.add('oculta');
                 esperandoOpciones = false;
                 colaDialogos = [
                     { img: "Melodie_normal (2).jpeg", txt: "Uy cariño, no pasa nada. Al ser nuevo no siempre es fácil conectar con la comunidad. Aunque ya es demasiado tarde para poder explicarte todo sobre mí, así que mejor vuelve otro día." },
-                    { img: "Melodie_normal (2).jpeg", txt: "<i>*Melodie se fue a descansar*</i>, así que decides marcharte y pensar en volver otro día." },
-                    { img: "Melodie_normal (2).jpeg", txt: "<b>FIN DEL CHAT:</b> Tuviste una charla bastante rara con Melodie.", esFinal: true }
+                    { img: "TU_IMAGEN_NARRADOR.png", txt: "<i>*Melodie se fue a descansar*</i>, así que decides marcharte y pensar en volver otro día." },
+                    { img: "TU_IMAGEN_NARRADOR.png", txt: "Tuviste una charla bastante rara con Melodie.", esFinal: true }
                 ];
                 avanzarDialogo();
             }
@@ -200,9 +223,21 @@
                 cajaOpciones.classList.add('oculta');
                 esperandoOpciones = false;
                 colaDialogos = [
-                    { img: "Melodie_Preocupada (2).jpeg", txt: "<i>*Decides marcharte...*</i>" },
+                    { img: "TU_IMAGEN_NARRADOR.png", txt: "<i>*Decides marcharte...*</i>" },
                     { img: "Melodie_desanimada.jpeg", txt: "...pero Melodie no te deja de observar por tal ignorancia que le has hecho." },
-                    { img: "Melodie_desanimada.jpeg", txt: "<b>FIN DEL CHAT:</b> Has tenido una charla mala.", esFinal: true }
+                    { img: "TU_IMAGEN_NARRADOR.png", txt: "Has tenido una charla mala.", esFinal: true }
+                ];
+                avanzarDialogo();
+            }
+
+            function iniciarFinalPeor() {
+                cajaOpciones.classList.add('oculta');
+                esperandoOpciones = false;
+                colaDialogos = [
+                    { img: "TU_IMAGEN_MELODIE_FURIOSA_1.png", txt: "¡¿Cómo se te ocurre tratarme así?!" },
+                    { img: "TU_IMAGEN_MELODIE_FURIOSA_2.png", txt: "Ojalá no vuelvas para no volver a ver esa cara de pend***." },
+                    { img: "TU_IMAGEN_MELODIE_FURIOSA_3.png", txt: "¡CHAO!" },
+                    { img: "TU_IMAGEN_NARRADOR.png", txt: "Tuviste una de las peores conversaciones con Melodie.", esFinal: true }
                 ];
                 avanzarDialogo();
             }
