@@ -20,7 +20,7 @@
             <h2>Hablando con Melodie 🎤</h2>
         </div>
 
-        <!-- El Escenario Central -->
+        <!-- El Escenario Central (Ahora también recibe los clics) -->
         <div class="escena-vn">
             
             <!-- Personaje en grande al centro -->
@@ -30,6 +30,8 @@
             <div class="caja-dialogo-vn" id="caja-dialogo">
                 <img id="icono-dialogo" src="Melodie_Encantada.png" alt="Icono" class="icono-mini-dialogo">
                 <p id="texto-dialogo">...</p>
+                <!-- Un pequeño indicador visual para que sepan que pueden hacer clic -->
+                <span style="position:absolute; right:15px; bottom:10px; color:#fff; font-size:0.8rem; opacity:0.7;">Click para continuar ▶</span>
             </div>
 
             <!-- Opciones del jugador -->
@@ -45,10 +47,10 @@
 
     <script>
         document.addEventListener("DOMContentLoaded", () => {
-            // Cargar el perfil del usuario
-            const nombreCompleto = localStorage.getItem('dracoNombre') || "Invitado";
+            // Cargar el perfil del usuario (Usamos Draco como respaldo)
+            const nombreCompleto = localStorage.getItem('dracoNombre') || "Draco";
             const avatar = localStorage.getItem('dracoAvatar');
-            const primerNombre = nombreCompleto.split(' ')[0]; // Solo el primer nombre
+            const primerNombre = nombreCompleto.split(' ')[0]; 
 
             if (nombreCompleto && avatar) {
                 document.getElementById('nombre-usuario-display').textContent = nombreCompleto;
@@ -60,107 +62,153 @@
             const iconoDialogo = document.getElementById('icono-dialogo');
             const textoDialogo = document.getElementById('texto-dialogo');
             const cajaOpciones = document.getElementById('caja-opciones');
+            const btn1 = document.getElementById('opcion-1');
+            const btn2 = document.getElementById('opcion-2');
+            const btn3 = document.getElementById('opcion-3');
 
-            // Función mágica para actualizar la escena (cambia la foto y el texto en el mismo lugar)
+            // --- NUEVO SISTEMA DE DIÁLOGOS POR CLIC ---
+            let colaDialogos = [];
+            let esperandoOpciones = false;
+
             function actualizarEscena(imagen, texto) {
-                // Hacemos que la imagen se desvanezca rápido
                 spritePersonaje.style.opacity = 0;
-                
                 setTimeout(() => {
-                    // Cambiamos la foto gigante, el icono pequeñito y el texto
                     spritePersonaje.src = imagen;
                     iconoDialogo.src = imagen;
                     textoDialogo.innerHTML = texto;
-                    // Hacemos que vuelva a aparecer
                     spritePersonaje.style.opacity = 1;
-                }, 200);
+                }, 150); // Transición un poco más rápida para clics
             }
 
-// --- LA SECUENCIA DE DIÁLOGOS INICIAL ---
-            
-            // 1. Inicia inmediatamente
-            setTimeout(() => {
-                actualizarEscena("Melodie_Encantada.png", "!!~AY UN GUSTO LINDO!!. Me llamo Melodie");
-            }, 300);
+            // Función central que avanza la historia
+            function avanzarDialogo() {
+                // Si no hay diálogos en cola o estamos esperando que elijan un botón, ignoramos el clic
+                if (colaDialogos.length === 0 || esperandoOpciones) return;
 
-            // 2. A los 3.5 segundos cambia a la segunda frase
-            setTimeout(() => {
-                actualizarEscena("Melodie_Preocupada (2).jpeg", "Aunque Locuras Draco y sus amigos me llaman Melodie Aesthetic o Coreana pero... *bosteza*");
-            }, 3500);
+                // Sacamos el primer diálogo de la lista
+                const actual = colaDialogos.shift();
+                actualizarEscena(actual.img, actual.txt);
 
-            // 3. A los 7 segundos cambia a la tercera frase y muestra las opciones iniciales
-            setTimeout(() => {
-                actualizarEscena("Melodie_normal (2).jpeg", "Y bien lindo, ¿qué quieres saber de mí?");
-                
-                // Mostramos los botones de la PRIMERA decisión
-                setTimeout(() => {
-                    const btn1 = document.getElementById('opcion-1');
-                    const btn2 = document.getElementById('opcion-2');
-                    const btn3 = document.getElementById('opcion-3');
+                // Si este diálogo activa botones, los mostramos y bloqueamos el avance por clic
+                if (actual.showOptions) {
+                    esperandoOpciones = true;
+                    setTimeout(() => mostrarOpciones(actual.showOptions), 600); // Pequeña pausa antes de mostrar botones
+                }
 
+                // Si este diálogo es un Final, mostramos el botón de volver
+                if (actual.esFinal) {
+                    esperandoOpciones = true;
+                    setTimeout(() => {
+                        btn1.innerHTML = "🔙 Volver al Menú Principal";
+                        btn2.style.display = "none";
+                        btn3.style.display = "none";
+                        btn1.onclick = () => window.location.href = "inicio.html";
+                        cajaOpciones.classList.remove('oculta');
+                    }, 1000);
+                }
+            }
+
+            // Detectamos los clics en toda la pantalla
+            document.body.addEventListener('click', (evento) => {
+                // Evitar avanzar si hacen clic en un botón, en las opciones, o en la barra de volver arriba
+                if (evento.target.tagName.toLowerCase() === 'button' || evento.target.closest('.zona-opciones-vn') || evento.target.closest('.cabecera-chat')) {
+                    return;
+                }
+                avanzarDialogo();
+            });
+
+            // Administrador de botones según la fase
+            function mostrarOpciones(fase) {
+                if (fase === 1) {
                     btn1.innerHTML = `<i>*Sonrojado*</i> E-eh... sí, hola Melodie. Mucho gusto, me llamo <b>${primerNombre}</b> y quería saber un poco de tus gustos musicales, jeje. Si no te molesta, claro.`;
                     btn2.innerHTML = `<i>*La mira con admiración*</i> ¡¡Melodie, un gusto!! Me llamo <b>${primerNombre}</b> y, bueno... quería saber si podríamos tener una pequeña cita para comer.`;
                     btn3.innerHTML = `<i>*Un poco nervioso*</i> Hola Melodie, mucho gusto. Me llamo <b>${primerNombre}</b> y quería saber más cosas sobre ti... si no te molesta.`;
+                    btn3.style.display = "block";
                     
-                    cajaOpciones.classList.remove('oculta');
+                    btn1.onclick = () => { iniciarFase2_Opcion1(); };
+                    btn2.onclick = () => { alert("¡Ruta cita en construcción!"); };
+                    btn3.onclick = () => { alert("¡Ruta curiosidad en construcción!"); };
+                } 
+                else if (fase === 2) {
+                    btn1.innerHTML = `Yo no lo sé, Melodie, por eso pregunto. ¿Cuál es tu género musical favorito? jeje.`;
+                    btn2.innerHTML = `Déjame adivinar... te gusta el K-pop, ¿verdad?`;
+                    btn3.style.display = "none";
 
-// ==========================================
-                    // ¿QUÉ PASA CUANDO EL USUARIO ELIGE LA OPCIÓN 1? (PRIMERA RONDA)
-                    // ==========================================
-                    btn1.onclick = function() {
-                        cajaOpciones.classList.add('oculta');
-                        
-                        actualizarEscena("Melodie_apuntando.jpeg", `¡Claro, <b>${primerNombre}</b>! Yo no tengo problema en hablarle a mis fans sobre mis gustos musicales.`);
-                        
-                        setTimeout(() => {
-                            actualizarEscena("Melodie_interesada.jpeg", "Bueno, aunque la mayoría ya sabe cuáles son mis gustos musicales favoritos, jiji... Pero bueno, cariño, ¿qué te gustaría saber?");
-                            
-                            setTimeout(() => {
-                                btn1.innerHTML = `Yo no lo sé, Melodie, por eso pregunto. ¿Cuál es tu género musical favorito? jeje.`;
-                                btn2.innerHTML = `Déjame adivinar... te gusta el K-pop, ¿verdad?`;
-                                
-                                btn3.style.display = "none"; // Ocultamos el 3er botón
-                                
-                                // ==========================================
-                                // ¿QUÉ PASA CUANDO ELIGE LA OPCIÓN 1 EN LA SEGUNDA RONDA?
-                                // ==========================================
-                                btn1.onclick = function() {
-                                    cajaOpciones.classList.add('oculta');
-                                    
-                                    // 1. Melodie se indigna inmediatamente
-                                    // OJO: Cambia el nombre aquí por el de tu PNG sin fondo
-                                    actualizarEscena("Melodie_sorprendida.jpeg", "¡¿Cómo es posible que sepas mi nombre pero no sepas mi género musical favorito, si es con el que todos me han estado escuchando a lo largo de mi carrera?!");
-                                    
-                                    // 2. A los 5 segundos, se pone desanimada
-                                    setTimeout(() => {
-                                        // OJO: Cambia el nombre aquí por el de tu PNG sin fondo
-                                        actualizarEscena("Melodie_desanimada.jpeg", "<i>*Lo mira un poco desanimada*</i> Mi género musical favorito es el K-pop.");
-                                        
-                                        // 3. A los 4 segundos (9 seg en total), dice la última frase con la misma imagen
-                                        setTimeout(() => {
-                                            textoDialogo.innerHTML = "Pero de nada me sirve decírtelo ahora, si apenas conoces mi nombre. Vaya, deberás conocerme más de lo habitual... aunque no sé si darte el tiempo, ya que tengo cosas que hacer. <i>*Un poco desanimada*</i>";
-                                            // Nota: Aquí solo cambié el texto (textoDialogo.innerHTML) para no hacer el parpadeo de la imagen, ya que es la misma pose.
-                                        }, 4000);
+                    btn1.onclick = () => { iniciarFase3_Opcion1(); };
+                    btn2.onclick = () => { alert("¡Ruta K-Pop en construcción!"); };
+                }
+                else if (fase === 3) {
+                    btn1.innerHTML = `Perdón por no saber y desanimarte, Melodie. No fue mi intención, es que soy nuevo en tu comunidad y...`;
+                    btn2.innerHTML = `Ay, no pensé que te llegarías a desanimar por no saber tu gusto musical, linda.`;
+                    btn3.innerHTML = `Ah, lo siento Melodie, era solo para saber, jeje. Bueno, hablamos otro día, chao.`;
+                    btn3.style.display = "block";
 
-                                    }, 5000);
-                                };
+                    btn1.onclick = () => { iniciarFinalRaro(); };
+                    btn2.onclick = () => { alert("¡Ruta en construcción!"); };
+                    btn3.onclick = () => { iniciarFinalMalo(); };
+                }
 
-                                // Dejamos la opción 2 pendiente para después
-                                btn2.onclick = function() { console.log("Próximamente K-Pop..."); };
+                cajaOpciones.classList.remove('oculta');
+            }
 
-                                cajaOpciones.classList.remove('oculta');
-                            }, 1000);
+            // --- CARGADOR DE RUTAS (HISTORIA) ---
 
-                        }, 4000); 
-                    };
+            function iniciarFase1() {
+                cajaOpciones.classList.add('oculta');
+                esperandoOpciones = false;
+                colaDialogos = [
+                    { img: "Melodie_Encantada.png", txt: "!!~AY UN GUSTO LINDO!!. Me llamo Melodie" },
+                    { img: "Melodie_Preocupada (2).jpeg", txt: "Aunque Locuras Draco y sus amigos me llaman Melodie Aesthetic o Coreana pero... *bosteza*" },
+                    { img: "Melodie_normal (2).jpeg", txt: "Y bien lindo, ¿qué quieres saber de mí?", showOptions: 1 }
+                ];
+                avanzarDialogo(); // Forzamos el primero para que no empiece en blanco
+            }
 
-                    // Acciones temporales para los botones 2 y 3 originales (para que no den error)
-                    btn2.onclick = function() { alert("¡La ruta de la cita se está construyendo! Vuelve a intentar la Opción 1."); };
-                    btn3.onclick = function() { alert("¡La ruta de curiosidades se está construyendo! Vuelve a intentar la Opción 1."); };
+            function iniciarFase2_Opcion1() {
+                cajaOpciones.classList.add('oculta');
+                esperandoOpciones = false;
+                colaDialogos = [
+                    { img: "Melodie_apuntando.jpeg", txt: `¡Claro, <b>${primerNombre}</b>! Yo no tengo problema en hablarle a mis fans sobre mis gustos musicales.` },
+                    { img: "Melodie_interesada.jpeg", txt: "Bueno, aunque la mayoría ya sabe cuáles son mis gustos musicales favoritos, jiji... Pero bueno, cariño, ¿qué te gustaría saber?", showOptions: 2 }
+                ];
+                avanzarDialogo();
+            }
 
-                }, 1000);
+            function iniciarFase3_Opcion1() {
+                cajaOpciones.classList.add('oculta');
+                esperandoOpciones = false;
+                colaDialogos = [
+                    { img: "Melodie_sorprendida.jpeg", txt: "¡¿Cómo es posible que sepas mi nombre pero no sepas mi género musical favorito, si es con el que todos me han estado escuchando a lo largo de mi carrera?!" },
+                    { img: "Melodie_desanimada.jpeg", txt: "<i>*Lo mira un poco desanimada*</i> Mi género musical favorito es el K-pop." },
+                    { img: "Melodie_desanimada.jpeg", txt: "Pero de nada me sirve decírtelo ahora, si apenas conoces mi nombre. Vaya, deberás conocerme más de lo habitual... aunque no sé si darte el tiempo, ya que tengo cosas que hacer. <i>*Un poco desanimada*</i>", showOptions: 3 }
+                ];
+                avanzarDialogo();
+            }
 
-            }, 7500);
+            function iniciarFinalRaro() {
+                cajaOpciones.classList.add('oculta');
+                esperandoOpciones = false;
+                colaDialogos = [
+                    { img: "Melodie_normal (2).jpeg", txt: "Uy cariño, no pasa nada. Al ser nuevo no siempre es fácil conectar con la comunidad. Aunque ya es demasiado tarde para poder explicarte todo sobre mí, así que mejor vuelve otro día." },
+                    { img: "Melodie_normal (2).jpeg", txt: "<i>*Melodie se fue a descansar*</i>, así que decides marcharte y pensar en volver otro día." },
+                    { img: "Melodie_normal (2).jpeg", txt: "<b>FIN DEL CHAT:</b> Tuviste una charla bastante rara con Melodie.", esFinal: true }
+                ];
+                avanzarDialogo();
+            }
+
+            function iniciarFinalMalo() {
+                cajaOpciones.classList.add('oculta');
+                esperandoOpciones = false;
+                colaDialogos = [
+                    { img: "Melodie_Preocupada (2).jpeg", txt: "<i>*Decides marcharte...*</i>" },
+                    { img: "Melodie_desanimada.jpeg", txt: "...pero Melodie no te deja de observar por tal ignorancia que le has hecho." },
+                    { img: "Melodie_desanimada.jpeg", txt: "<b>FIN DEL CHAT:</b> Has tenido una charla mala.", esFinal: true }
+                ];
+                avanzarDialogo();
+            }
+
+            // Arrancamos el juego automáticamente
+            iniciarFase1();
         });
     </script>
 </body>
