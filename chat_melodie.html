@@ -82,20 +82,16 @@
 
             // Función central que avanza la historia
             function avanzarDialogo() {
-                // Si no hay diálogos en cola o estamos esperando que elijan un botón, ignoramos el clic
                 if (colaDialogos.length === 0 || esperandoOpciones) return;
 
-                // Sacamos el primer diálogo de la lista
                 const actual = colaDialogos.shift();
                 actualizarEscena(actual.img, actual.txt);
 
-                // Si este diálogo activa botones, los mostramos y bloqueamos el avance por clic
                 if (actual.showOptions) {
                     esperandoOpciones = true;
-                    setTimeout(() => mostrarOpciones(actual.showOptions), 600); // Pequeña pausa antes de mostrar botones
+                    setTimeout(() => mostrarOpciones(actual.showOptions), 600); 
                 }
 
-                // Si este diálogo es un Final, mostramos el botón de volver
                 if (actual.esFinal) {
                     esperandoOpciones = true;
                     setTimeout(() => {
@@ -110,7 +106,6 @@
 
             // Detectamos los clics en toda la pantalla
             document.body.addEventListener('click', (evento) => {
-                // Evitar avanzar si hacen clic en un botón, en las opciones, o en la barra superior
                 if (evento.target.tagName.toLowerCase() === 'button' || evento.target.closest('.zona-opciones-vn') || evento.target.closest('.cabecera-chat')) {
                     return;
                 }
@@ -120,43 +115,42 @@
             // Administrador de botones según la fase
             function mostrarOpciones(fase) {
                 if (fase === 1) {
-                    btn1.innerHTML = `<i>*Sonrojado*</i> E-eh... sí, hola Melodie. Mucho gusto, me llamo <b>${primerNombre}</b> y quería saber un poco de tus gustos musicales, jeje. Si no te molesta, claro.`;
-                    btn2.innerHTML = `<i>*La mira con admiración*</i> ¡¡Melodie, un gusto!! Me llamo <b>${primerNombre}</b> y, bueno... quería saber si podríamos tener una pequeña cita para comer.`;
-                    btn3.innerHTML = `<i>*Un poco nervioso*</i> Hola Melodie, mucho gusto. Me llamo <b>${primerNombre}</b> y quería saber más cosas sobre ti... si no te molesta.`;
-                    btn3.style.display = "block";
+                    btn1.innerHTML = `<i>*La mira con admiración*</i> ¡Melodie, un gusto! Me llamo <b>${primerNombre}</b> y, bueno... quería invitarte a salir a comer conmigo, si es que no te molesta.`;
+                    btn2.innerHTML = `<i>*Un poco nervioso*</i> Hola Melodie, mucho gusto. Me llamo <b>${primerNombre}</b> y quería saber más cosas sobre ti... si no te molesta.`;
+                    btn3.style.display = "none";
                     
-                    btn1.onclick = () => { iniciarFase2_Opcion1(); };
-                    btn2.onclick = () => { alert("¡Ruta cita en construcción!"); };
-                    btn3.onclick = () => { alert("¡Ruta curiosidad en construcción!"); };
+                    btn1.onclick = () => { iniciarRutaCita(); }; 
+                    btn2.onclick = () => { alert("¡Ruta curiosidad en construcción!"); };
                 } 
-                else if (fase === 2) {
-                    btn1.innerHTML = `Yo no lo sé, Melodie, por eso pregunto. ¿Cuál es tu género musical favorito? jeje.`;
-                    btn2.innerHTML = `Déjame adivinar... te gusta el K-pop, ¿verdad?`;
+                else if (fase === 5) {
+                    // LAS 3 OPCIONES DESPUÉS DE INVITARLA A COMER
+                    btn1.innerHTML = `O sea, no es lo que piensas, Melodie. Lo que pasa es que quiero aprender muchas cosas de ti.`;
+                    btn2.innerHTML = `Bueno, yo sé que recién nos conocemos, pero eso no me impide invitar a una chica tan linda como tú.`;
+                    btn3.innerHTML = `Wow, wow, ¿en qué estás pensando, coreana? Si solo es una invitación para salir a comer tú y yo con mis amigos.`;
+                    btn3.style.display = "block"; // Activamos el 3er botón
+
+                    btn1.onclick = () => { iniciarCita_Aprender(); };
+                    btn2.onclick = () => { iniciarCita_Coquetear(); };
+                    btn3.onclick = () => { iniciarCita_Coreana(); };
+                }
+                else if (fase === 6) {
+                    // SUB-OPCIONES SI LE DIJISTE COREANA
+                    btn1.innerHTML = `Pero vaya, si yo he oído a alguien que siempre te llama así y nunca le dices nada... pero parece que me olvidé de su nombre.`;
+                    btn2.innerHTML = `Pues lo siento, coreana, pero es divertido llamarte así, jaja. Así que bien, ¿aceptas o no aceptas?`;
                     btn3.style.display = "none";
 
-                    btn1.onclick = () => { iniciarFase3_Opcion1(); };
-                    btn2.onclick = () => { alert("¡Ruta K-Pop en construcción!"); };
+                    btn1.onclick = () => { alert("¡Ruta 'Me olvidé de su nombre' en construcción!"); };
+                    btn2.onclick = () => { iniciarCoreana_NoAcepto(); };
                 }
-                else if (fase === 3) {
-                    btn1.innerHTML = `Perdón por no saber y desanimarte, Melodie. No fue mi intención, es que soy nuevo en tu comunidad y...`;
-                    btn2.innerHTML = `Ay, no pensé que te llegarías a desanimar por no saber tu gusto musical, linda.`;
-                    btn3.innerHTML = `Ah, lo siento Melodie, era solo para saber, jeje. Bueno, hablamos otro día, chao.`;
-                    btn3.style.display = "block";
-
-                    btn1.onclick = () => { iniciarFinalRaro(); };
-                    btn2.onclick = () => { iniciarFase4_Opcion2(); }; // <-- AQUÍ CONECTAMOS LA NUEVA RUTA
-                    btn3.onclick = () => { iniciarFinalMalo(); };
-                }
-                else if (fase === 4) {
-                    // Nuevas opciones para el ego de Melodie
-                    btn1.innerHTML = `Ay, Melodie, está bien, discúlpame, ahora lo sé... dijiste que tienes cosas que hacer, así que bueno, nos vemos para la próxima, cuídate.`;
-                    btn2.innerHTML = `Vaya, siendo una de las idols más famosas, sí que tienes el ego por las nubes al igual que la Canon. Así que chao, loca.`;
+                else if (fase === 7) {
+                    // SUB-SUB-OPCIONES CUANDO ELLA TE VA A RECHAZAR
+                    btn1.innerHTML = `<i>*La interrumpes*</i> Va a ir mi mejor amigo, Locuras Draco.`;
+                    btn2.innerHTML = `Pues entonces vete a la mie*** y hasta nunca. -1 seguidor.`;
                     btn3.style.display = "none";
 
-                    btn1.onclick = () => { alert("¡Ruta de disculpa en construcción!"); };
-                    btn2.onclick = () => { iniciarFinalPeor(); }; // <-- AQUÍ CONECTAMOS EL PEOR FINAL
+                    btn1.onclick = () => { alert("¡Ruta Locuras Draco en construcción!"); };
+                    btn2.onclick = () => { iniciarFinal_Insulto(); }; // <-- Final Malo
                 }
-
                 cajaOpciones.classList.remove('oculta');
             }
 
@@ -173,71 +167,65 @@
                 avanzarDialogo();
             }
 
-            function iniciarFase2_Opcion1() {
+            function iniciarRutaCita() {
                 cajaOpciones.classList.add('oculta');
                 esperandoOpciones = false;
                 colaDialogos = [
-                    { img: "Melodie_apuntando.jpeg", txt: `¡Claro, <b>${primerNombre}</b>! Yo no tengo problema en hablarle a mis fans sobre mis gustos musicales.` },
-                    { img: "Melodie_interesada.jpeg", txt: "Bueno, aunque la mayoría ya sabe cuáles son mis gustos musicales favoritos, jiji... Pero bueno, cariño, ¿qué te gustaría saber?", showOptions: 2 }
+                    { img: "TU_IMAGEN_MELODIE_CITA_1.png", txt: `Uy, ¡vaya que eres directo, <b>${primerNombre}</b>! ¿Y para qué quieres invitarme a comer si apenas nos conocemos?`, showOptions: 5 }
                 ];
                 avanzarDialogo();
             }
 
-            function iniciarFase3_Opcion1() {
+            function iniciarCita_Aprender() {
                 cajaOpciones.classList.add('oculta');
                 esperandoOpciones = false;
                 colaDialogos = [
-                    { img: "Melodie_sorprendida.jpeg", txt: "¡¿Cómo es posible que sepas mi nombre pero no sepas mi género musical favorito, si es con el que todos me han estado escuchando a lo largo de mi carrera?!" },
-                    { img: "Melodie_desanimada.jpeg", txt: "<i>*Lo mira un poco desanimada*</i> Mi género musical favorito es el K-pop." },
-                    { img: "Melodie_desanimada.jpeg", txt: "Pero de nada me sirve decírtelo ahora, si apenas conoces mi nombre. Vaya, deberás conocerme más de lo habitual... aunque no sé si darte el tiempo, ya que tengo cosas que hacer. <i>*Un poco desanimada*</i>", showOptions: 3 }
+                    { img: "TU_IMAGEN_MELODIE_CURIOSA.png", txt: "¿Cómo qué cosas quieres aprender de mí?" }
+                    // Aquí luego añadiremos más diálogo y opciones
                 ];
                 avanzarDialogo();
             }
 
-            // === LA NUEVA RUTA DEL EGO ===
-            function iniciarFase4_Opcion2() {
+            function iniciarCita_Coquetear() {
                 cajaOpciones.classList.add('oculta');
                 esperandoOpciones = false;
                 colaDialogos = [
-                    { img: "TU_IMAGEN_MELODIE_OFENDIDA.png", txt: "Uy, sí, ¿cómo no desanimarme, cariño?" },
-                    { img: "TU_IMAGEN_MELODIE_ORGULLOSA.png", txt: "Soy una de las idols más famosas y más perfectas de este universo." },
-                    { img: "TU_IMAGEN_MELODIE_ENOJADA.png", txt: "Así que, ¿cómo no ofenderme por algo muy básico como no saber mi gusto musical?", showOptions: 4 }
+                    { img: "TU_IMAGEN_MELODIE_EMOCIONADA.png", txt: "~¡Ay, qué considerado! <i>*Grita de la emoción*</i>" },
+                    { img: "TU_IMAGEN_MELODIE_COQUETA.png", txt: "Pero no te llevarás mi corazón tan fácilmente, cariño." },
+                    { img: "TU_IMAGEN_MELODIE_FELIZ.png", txt: `Pero en fin, acepto tu invitación, <b>${primerNombre}</b>.` },
+                    { img: "TU_IMAGEN_MELODIE_DESPIDIENDOSE.png", txt: `Nos vemos mañana por la tarde, <b>${primerNombre}</b>. ¡Cuídate mucho!` },
+                    { img: "TU_IMAGEN_NARRADOR.png", txt: "<b>FIN DEL CHAT:</b> ¡Has conseguido una cita con Melodie!", esFinal: true }
                 ];
                 avanzarDialogo();
             }
 
-            // === LOS FINALES ===
-
-            function iniciarFinalRaro() {
+            function iniciarCita_Coreana() {
                 cajaOpciones.classList.add('oculta');
                 esperandoOpciones = false;
                 colaDialogos = [
-                    { img: "Melodie_normal (2).jpeg", txt: "Uy cariño, no pasa nada. Al ser nuevo no siempre es fácil conectar con la comunidad. Aunque ya es demasiado tarde para poder explicarte todo sobre mí, así que mejor vuelve otro día." },
-                    { img: "TU_IMAGEN_NARRADOR.png", txt: "<i>*Melodie se fue a descansar*</i>, así que decides marcharte y pensar en volver otro día." },
-                    { img: "TU_IMAGEN_NARRADOR.png", txt: "Tuviste una charla bastante rara con Melodie.", esFinal: true }
+                    { img: "TU_IMAGEN_MELODIE_ENOJADA_1.png", txt: "¡¿Cómo se te ocurre decirme 'coreana'?!" },
+                    { img: "TU_IMAGEN_MELODIE_ENOJADA_2.png", txt: "Ya la mayoría me tiene cansada con llamarme por mi nacionalidad, eso es una falta de respeto muy grande para mí.", showOptions: 6 }
                 ];
                 avanzarDialogo();
             }
 
-            function iniciarFinalMalo() {
+            function iniciarCoreana_NoAcepto() {
                 cajaOpciones.classList.add('oculta');
                 esperandoOpciones = false;
                 colaDialogos = [
-                    { img: "TU_IMAGEN_NARRADOR.png", txt: "<i>*Decides marcharte...*</i>" },
-                    { img: "Melodie_desanimada.jpeg", txt: "...pero Melodie no te deja de observar por tal ignorancia que le has hecho." },
-                    { img: "TU_IMAGEN_NARRADOR.png", txt: "Has tenido una charla mala.", esFinal: true }
+                    { img: "TU_IMAGEN_MELODIE_FURIOSA.png", txt: "¡¡No acepto!! Así que hasta...", showOptions: 7 }
                 ];
                 avanzarDialogo();
             }
 
-            function iniciarFinalPeor() {
+            function iniciarFinal_Insulto() {
                 cajaOpciones.classList.add('oculta');
                 esperandoOpciones = false;
                 colaDialogos = [
-                    { img: "TU_IMAGEN_MELODIE_FURIOSA_1.png", txt: "¡¿Cómo se te ocurre tratarme así?!" },
-                    { img: "TU_IMAGEN_MELODIE_FURIOSA_2.png", txt: "Ojalá no vuelvas para no volver a ver esa cara de pend***." },
-                    { img: "TU_IMAGEN_MELODIE_FURIOSA_3.png", txt: "¡CHAO!" },
-                    { img: "TU_IMAGEN_NARRADOR.png", txt: "Tuviste una de las peores conversaciones con Melodie.", esFinal: true }
+                    { img: "TU_IMAGEN_MELODIE_ULTRA_FURIOSA.png", txt: "¡¿Cómo se te ocurre tratarme así?!" },
+                    { img: "TU_IMAGEN_MELODIE_ULTRA_FURIOSA.png", txt: "Ojalá no vuelvas para no volver a ver esa cara de pend***." },
+                    { img: "TU_IMAGEN_MELODIE_ULTRA_FURIOSA.png", txt: "¡CHAO!" },
+                    { img: "TU_IMAGEN_NARRADOR.png", txt: "<b>FIN DEL CHAT:</b> Tuviste una de las peores conversaciones con Melodie.", esFinal: true }
                 ];
                 avanzarDialogo();
             }
