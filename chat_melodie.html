@@ -5,6 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chat con Melodie - Locuras Draco</title>
     <link rel="stylesheet" href="style.css">
+    <!-- Estilo extra para soportar hasta 5 botones sin que se rompa el diseño -->
+    <style>
+        .zona-opciones-vn {
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .btn-opcion-vn {
+            min-width: 45%; /* Hace que si hay más de 3, se pongan en dos filas */
+        }
+    </style>
 </head>
 <body class="cuerpo-vn">
 
@@ -31,10 +41,13 @@
                 <span style="position:absolute; right:15px; bottom:10px; color:#fff; font-size:0.8rem; opacity:0.7;">Click para continuar ▶</span>
             </div>
 
+            <!-- Opciones del jugador (AHORA SOPORTA HASTA 5 BOTONES) -->
             <div class="zona-opciones-vn oculta" id="caja-opciones">
                 <button class="btn-opcion-vn" id="opcion-1"></button>
                 <button class="btn-opcion-vn" id="opcion-2"></button>
                 <button class="btn-opcion-vn" id="opcion-3"></button>
+                <button class="btn-opcion-vn" id="opcion-4"></button>
+                <button class="btn-opcion-vn" id="opcion-5"></button>
             </div>
 
         </div>
@@ -56,9 +69,12 @@
             const iconoDialogo = document.getElementById('icono-dialogo');
             const textoDialogo = document.getElementById('texto-dialogo');
             const cajaOpciones = document.getElementById('caja-opciones');
+            
             const btn1 = document.getElementById('opcion-1');
             const btn2 = document.getElementById('opcion-2');
             const btn3 = document.getElementById('opcion-3');
+            const btn4 = document.getElementById('opcion-4');
+            const btn5 = document.getElementById('opcion-5');
 
             let colaDialogos = [];
             let esperandoOpciones = false;
@@ -87,9 +103,13 @@
                 if (actual.esFinal) {
                     esperandoOpciones = true;
                     setTimeout(() => {
+                        // Ocultamos todos los botones extras y dejamos solo el de volver
                         btn1.innerHTML = "🔙 Volver al Menú Principal";
+                        btn1.style.display = "block";
                         btn2.style.display = "none";
                         btn3.style.display = "none";
+                        btn4.style.display = "none";
+                        btn5.style.display = "none";
                         btn1.onclick = () => window.location.href = "inicio.html";
                         cajaOpciones.classList.remove('oculta');
                     }, 1000);
@@ -103,21 +123,33 @@
                 avanzarDialogo();
             });
 
+            // Oculta todos los botones para prender solo los necesarios
+            function resetBotones() {
+                btn1.style.display = "none";
+                btn2.style.display = "none";
+                btn3.style.display = "none";
+                btn4.style.display = "none";
+                btn5.style.display = "none";
+            }
+
             // Administrador de botones según la fase
             function mostrarOpciones(fase) {
+                resetBotones(); // Limpiamos antes de mostrar
+
                 if (fase === 1) {
                     btn1.innerHTML = `<i>*La mira con admiración*</i> ¡Melodie, un gusto! Me llamo <b>${primerNombre}</b> y, bueno... quería invitarte a salir a comer conmigo, si es que no te molesta.`;
                     btn2.innerHTML = `<i>*Un poco nervioso*</i> Hola Melodie, mucho gusto. Me llamo <b>${primerNombre}</b> y quería saber más cosas sobre ti... si no te molesta.`;
-                    btn3.style.display = "none";
+                    btn1.style.display = "block";
+                    btn2.style.display = "block";
                     
                     btn1.onclick = () => { iniciarRutaCita(); }; 
-                    btn2.onclick = () => { alert("¡Ruta curiosidad en construcción!"); };
+                    btn2.onclick = () => { iniciarRutaCuriosidad(); }; // <--- CONECTADO CON LA NUEVA RUTA
                 } 
                 else if (fase === 5) {
                     btn1.innerHTML = `O sea, no es lo que piensas, Melodie. Lo que pasa es que quiero aprender muchas cosas de ti.`;
                     btn2.innerHTML = `Bueno, yo sé que recién nos conocemos, pero eso no me impide invitar a una chica tan linda como tú.`;
                     btn3.innerHTML = `Wow, wow, ¿en qué estás pensando, coreana? Si solo es una invitación para salir a comer tú y yo con mis amigos.`;
-                    btn3.style.display = "block"; 
+                    btn1.style.display = "block"; btn2.style.display = "block"; btn3.style.display = "block";
 
                     btn1.onclick = () => { iniciarCita_Aprender(); };
                     btn2.onclick = () => { iniciarCita_Coquetear(); };
@@ -126,7 +158,7 @@
                 else if (fase === 6) {
                     btn1.innerHTML = `Pero vaya, si yo he oído a alguien que siempre te llama así y nunca le dices nada... pero parece que me olvidé de su nombre.`;
                     btn2.innerHTML = `Pues lo siento, coreana, pero es divertido llamarte así, jaja. Así que bien, ¿aceptas o no aceptas?`;
-                    btn3.style.display = "none";
+                    btn1.style.display = "block"; btn2.style.display = "block";
 
                     btn1.onclick = () => { alert("¡Ruta 'Me olvidé de su nombre' en construcción!"); };
                     btn2.onclick = () => { iniciarCoreana_NoAcepto(); };
@@ -134,29 +166,23 @@
                 else if (fase === 7) {
                     btn1.innerHTML = `<i>*La interrumpes*</i> Va a ir mi mejor amigo, Locuras Draco.`;
                     btn2.innerHTML = `Pues entonces vete a la mie*** y hasta nunca. -1 seguidor.`;
-                    btn3.style.display = "none";
+                    btn1.style.display = "block"; btn2.style.display = "block";
 
                     btn1.onclick = () => { alert("¡Ruta Locuras Draco en construcción!"); };
                     btn2.onclick = () => { iniciarFinal_Insulto(); }; 
                 }
-                // ==========================================
-                // FASE 8: QUÉ QUIERES APRENDER (CORREGIDO)
-                // ==========================================
                 else if (fase === 8) {
                     btn1.innerHTML = `Después de almorzar, quiero aprender a bailar contigo.`;
                     btn2.innerHTML = `Después de almorzar, quiero invitarte a mi casa para poder jugar unas partidas de Brawl Stars.`;
-                    btn3.style.display = "none";
+                    btn1.style.display = "block"; btn2.style.display = "block";
 
                     btn1.onclick = () => { iniciarAprender_Bailar(); }; 
                     btn2.onclick = () => { iniciarAprender_BrawlStars(); }; 
                 }
-                // ==========================================
-                // FASE 9: A BAILAR O APRENDER PASOS (CORREGIDO)
-                // ==========================================
                 else if (fase === 9) {
                     btn1.innerHTML = `Sí, después de almorzar, quiero que me enseñes unos pasos.`;
                     btn2.innerHTML = `Sí, a bailar contigo, Melodie. Es mi mayor sueño.`; 
-                    btn3.style.display = "none";
+                    btn1.style.display = "block"; btn2.style.display = "block";
 
                     btn1.onclick = () => { iniciarAprender_Pasos(); }; 
                     btn2.onclick = () => { iniciarAprender_Sueno(); }; 
@@ -164,23 +190,111 @@
                 else if (fase === 10) {
                     btn1.innerHTML = `<i>*Lo dices entre una gran tristeza*</i> Perdóname Melodie, no calculé bien el tiempo...`;
                     btn2.innerHTML = `Ay Melodie, perdón, nunca me imaginé que pesaras mucho.`;
-                    btn3.style.display = "none";
+                    btn1.style.display = "block"; btn2.style.display = "block";
 
                     btn1.onclick = () => { iniciarCaida_Perdon(); }; 
                     btn2.onclick = () => { iniciarCaida_Pesada(); }; 
                 }
-                // ==========================================
-                // FASE 11: RECHAZO BRAWL STARS
-                // ==========================================
                 else if (fase === 11) {
                     btn1.innerHTML = `(Ruta 1 en construcción)`;
                     btn2.innerHTML = `(Ruta 2 en construcción)`;
                     btn3.innerHTML = `(Ruta 3 en construcción)`;
-                    btn3.style.display = "block"; // Aquí pediste que aparezcan 3 casillas
+                    btn1.style.display = "block"; btn2.style.display = "block"; btn3.style.display = "block";
 
                     btn1.onclick = () => { alert("¡Casilla 1 de Brawl Stars en construcción!"); }; 
                     btn2.onclick = () => { alert("¡Casilla 2 de Brawl Stars en construcción!"); }; 
                     btn3.onclick = () => { alert("¡Casilla 3 de Brawl Stars en construcción!"); }; 
+                }
+                // ==========================================
+                // NUEVAS FASES DE LA RUTA CURIOSIDAD
+                // ==========================================
+                else if (fase === 21) {
+                    // 4 Casillas de curiosidad
+                    btn1.innerHTML = `Melodie, ¿tienes algún otro género musical favorito aparte del K-pop?`;
+                    btn2.innerHTML = `Melodie, ¿tú sientes amor o deseo hacia alguien?`;
+                    btn3.innerHTML = `Melodie, tú eres surcoreana pero veo que cuando estás con todos tus compatriotas no te sientes cómoda, ¿por qué eres así?`;
+                    btn4.innerHTML = `Melodie, ¿por qué te gusta que te llamemos así en vez de Melodie Aesthetic o Asiática?`;
+                    btn1.style.display = "block"; btn2.style.display = "block"; btn3.style.display = "block"; btn4.style.display = "block";
+
+                    btn1.onclick = () => { iniciarCuriosidad_Genero(); }; 
+                    btn2.onclick = () => { iniciarCuriosidad_Amor(); }; 
+                    btn3.onclick = () => { alert("¡Ruta 'Compatriotas' en construcción!"); }; 
+                    btn4.onclick = () => { alert("¡Ruta 'Aesthetic/Asiática' en construcción!"); }; 
+                }
+                else if (fase === 22) {
+                    btn1.innerHTML = `<i>*Sorprendido*</i> Vaya, quién lo habría imaginado, una idol escuchando Rock. Me sorprende la verdad.`;
+                    btn2.innerHTML = `<i>*Sorprendido*</i> Wow, no sabía la verdad que escuchabas Rock, ahora entiendo por qué te gusta ese tal hechicero del que todos hablan.`;
+                    btn1.style.display = "block"; btn2.style.display = "block";
+
+                    btn1.onclick = () => { iniciarGenero_Rock(); }; 
+                    btn2.onclick = () => { iniciarGenero_Hechicero(); }; 
+                }
+                else if (fase === 23) {
+                    btn1.innerHTML = `Tranquila, Melodie, no le diré a nadie para no manchar tu hermosa imagen.`;
+                    btn2.innerHTML = `(Ruta 2 en construcción - Casilla pendiente)`;
+                    btn1.style.display = "block"; btn2.style.display = "block";
+
+                    btn1.onclick = () => { iniciarRock_Secreto(); }; 
+                    btn2.onclick = () => { alert("¡Ruta 2 pendiente en construcción!"); }; 
+                }
+                else if (fase === 24) {
+                    btn1.innerHTML = `¿Locuras Draco? Él es mi mejor amigo, ¿él te hizo algo alguna vez?`;
+                    btn2.innerHTML = `¡¡Locuras Draco!! ¿Tienes alguna especie de relación con él?`;
+                    btn1.style.display = "block"; btn2.style.display = "block";
+
+                    btn1.onclick = () => { iniciarSecreto_DracoAmigo(); }; 
+                    btn2.onclick = () => { alert("¡Ruta 'Relación con Draco' en construcción!"); }; 
+                }
+                else if (fase === 25) {
+                    btn1.innerHTML = `Wow, así que entonces estás enamorada de él.`;
+                    btn2.innerHTML = `Jaja, gracias por decírmelo, Melodie. <i>*Corres del lugar para decirle a Ziggy*</i>`;
+                    btn1.style.display = "block"; btn2.style.display = "block";
+
+                    btn1.onclick = () => { iniciarHechicero_Enamorada(); }; 
+                    btn2.onclick = () => { iniciarHechicero_Chisme(); }; 
+                }
+                else if (fase === 26) {
+                    btn1.innerHTML = `Oooh vale. ¿Y no me dejarías adivinarlo, Melodie?`;
+                    btn2.innerHTML = `Qué interesante, ¿no me podrías dar más pistas, Melodie?`;
+                    btn1.style.display = "block"; btn2.style.display = "block";
+
+                    btn1.onclick = () => { iniciarAmor_Adivinar(); }; 
+                    btn2.onclick = () => { alert("¡Ruta 'Más pistas' en construcción!"); }; 
+                }
+                else if (fase === 27) {
+                    // AQUÍ ESTÁN LAS 5 CASILLAS PARA ADIVINAR
+                    btn1.innerHTML = `¿Lawrie?`;
+                    btn2.innerHTML = `¿Finx?`;
+                    btn3.innerHTML = `¿Chester?`;
+                    btn4.innerHTML = `¿Locuras Draco?`;
+                    btn5.innerHTML = `¿Fang?`;
+                    btn1.style.display = "block"; btn2.style.display = "block"; btn3.style.display = "block"; btn4.style.display = "block"; btn5.style.display = "block";
+
+                    btn1.onclick = () => { iniciarAdivinar_Lawrie(); }; 
+                    btn2.onclick = () => { iniciarAdivinar_Finx(); }; 
+                    btn3.onclick = () => { iniciarAdivinar_Chester(); }; 
+                    btn4.onclick = () => { iniciarAdivinar_Draco(); }; 
+                    btn5.onclick = () => { iniciarAdivinar_Fang(); }; 
+                }
+                else if (fase === 28) {
+                    btn1.innerHTML = `Wow, qué locura que ames a Locuras Draco, él es mi amigo... dime, ¿qué le ves de bueno a él?`;
+                    btn2.innerHTML = `Eso es increíble, Melodie. Sé que vas a lograr conquistarlo algún día. Igual quería saber si sabes todas las cosas sobre él.`;
+                    btn3.innerHTML = `<i>*Sorprendido*</i> ¡¡Locuras Draco!! Yo lo conozco, aunque no sabía que lo amabas mucho. Pensé que después de los acontecimientos de 'Por tu amor Draco' dejaste de amarlo tanto y solo fueron amigos.`;
+                    btn1.style.display = "block"; btn2.style.display = "block"; btn3.style.display = "block";
+
+                    btn1.onclick = () => { iniciarDraco_Amigo(); }; 
+                    btn2.onclick = () => { iniciarDraco_Conquistar(); }; 
+                    btn3.onclick = () => { alert("¡Ruta 'Sucesos del cómic' en construcción!"); }; 
+                }
+                else if (fase === 29) {
+                    btn1.innerHTML = `(Casilla 1 de Draco en construcción)`;
+                    btn2.innerHTML = `(Casilla 2 de Draco en construcción)`;
+                    btn3.innerHTML = `(Casilla 3 de Draco en construcción)`;
+                    btn1.style.display = "block"; btn2.style.display = "block"; btn3.style.display = "block";
+
+                    btn1.onclick = () => { alert("En construcción!"); }; 
+                    btn2.onclick = () => { alert("En construcción!"); }; 
+                    btn3.onclick = () => { alert("En construcción!"); }; 
                 }
 
                 cajaOpciones.classList.remove('oculta');
@@ -199,6 +313,9 @@
                 avanzarDialogo();
             }
 
+            // ==========================================
+            // RUTAS DE LA CITA Y EL BAILE (YA ESTABLECIDAS)
+            // ==========================================
             function iniciarRutaCita() {
                 cajaOpciones.classList.add('oculta');
                 esperandoOpciones = false;
@@ -208,7 +325,6 @@
                 avanzarDialogo();
             }
 
-            // === FASE 8 ===
             function iniciarCita_Aprender() {
                 cajaOpciones.classList.add('oculta');
                 esperandoOpciones = false;
@@ -218,7 +334,6 @@
                 avanzarDialogo();
             }
 
-            // === RUTAS DESPUÉS DE LA FASE 8 ===
             function iniciarAprender_Bailar() {
                 cajaOpciones.classList.add('oculta');
                 esperandoOpciones = false;
@@ -239,7 +354,6 @@
                 avanzarDialogo();
             }
 
-            // === RUTAS DESPUÉS DE LA FASE 9 ===
             function iniciarAprender_Pasos() {
                 cajaOpciones.classList.add('oculta');
                 esperandoOpciones = false;
@@ -273,7 +387,6 @@
                 avanzarDialogo();
             }
 
-            // === RUTAS DESPUÉS DE LA FASE 10 (CAÍDA) ===
             function iniciarCaida_Perdon() {
                 cajaOpciones.classList.add('oculta');
                 esperandoOpciones = false;
@@ -292,8 +405,8 @@
                 cajaOpciones.classList.add('oculta');
                 esperandoOpciones = false;
                 colaDialogos = [
-                    { img: "Melodie_enojada.png", txt: "¡¡QUÉÉÉÉÉ DIJISTE!!" },
-                    { img: "Melodie_enojada.png", txt: "<i>*Le vuelves a decir que pesa mucho*</i>" },
+                    { img: "Melodie_decepcionada.jpeg", txt: "¡¡QUÉÉÉÉÉ DIJISTE!!" },
+                    { img: "Melodie_decepcionada.jpeg", txt: "<i>*Le vuelves a decir que pesa mucho*</i>" },
                     { img: "Melodie_enojada.png", txt: "¿Acaso me estás diciendo gorda?" },
                     { img: "Melodie_ultra_furiosa.png", txt: "¡Cómo se te ocurre decirme así!" },
                     { img: "Melodie_ultra_furiosa.png", txt: "Sabes qué, mejor dejemos esta charla hasta aquí y no me vuelvas a buscar en tu vida. ¡¡CHAO!!" },
@@ -301,8 +414,6 @@
                 ];
                 avanzarDialogo();
             }
-
-            // === LAS DEMÁS RUTAS ANTIGUAS (Conservadas) ===
 
             function iniciarCita_Coquetear() {
                 cajaOpciones.classList.add('oculta');
@@ -312,7 +423,7 @@
                     { img: "Melodie_apuntando.jpeg", txt: "Pero no te llevarás mi corazón tan fácilmente, cariño." },
                     { img: "Melodie_normal (2).jpeg", txt: `Pero en fin, acepto tu invitación, <b>${primerNombre}</b>.` },
                     { img: "Melodie_normal (2).jpeg", txt: `Nos vemos mañana por la tarde, <b>${primerNombre}</b>. ¡Cuídate mucho!` },
-                    { img: "TU_IMAGEN_NARRADOR.png", txt: "<b>FIN DEL CHAT:</b> ¡Has conseguido una cita Impecable con Melodie!", esFinal: true }
+                    { img: "TU_IMAGEN_NARRADOR.png", txt: "<b>FIN DEL CHAT:</b> ¡Has conseguido una cita impecable con Melodie!", esFinal: true }
                 ];
                 avanzarDialogo();
             }
@@ -344,6 +455,224 @@
                     { img: "TU_IMAGEN_MELODIE_ULTRA_FURIOSA.png", txt: "Ojalá no vuelvas para no volver a ver esa cara de pend***." },
                     { img: "TU_IMAGEN_MELODIE_ULTRA_FURIOSA.png", txt: "¡CHAO!" },
                     { img: "TU_IMAGEN_NARRADOR.png", txt: "<b>FIN DEL CHAT:</b> Tuviste una de las peores conversaciones con Melodie.", esFinal: true }
+                ];
+                avanzarDialogo();
+            }
+
+            // ==========================================
+            // LA GRAN RUTA DE CURIOSIDAD Y CHISMES
+            // ==========================================
+
+            function iniciarRutaCuriosidad() {
+                cajaOpciones.classList.add('oculta');
+                esperandoOpciones = false;
+                colaDialogos = [
+                    { img: "TU_IMAGEN_MELODIE_INTERESADA.png", txt: "~Así que quieres saber cosas sobre mí y mi vida, ¿eh?" },
+                    { img: "TU_IMAGEN_MELODIE_SERIA.png", txt: "No tengo problema, lindo, pero eso sí, no vayas a hacer preguntas muy idiotas, ¿me escuchaste?" },
+                    { img: "TU_IMAGEN_NARRADOR.png", txt: "<i>*Mueves el pulgar y le dices 'Ok'*</i>" },
+                    { img: "TU_IMAGEN_MELODIE_SONRIENTE.png", txt: "Pero sin miedo, cariño, estamos solos por ahora. ¿Qué quieres saber sobre mí?", showOptions: 21 }
+                ];
+                avanzarDialogo();
+            }
+
+            function iniciarCuriosidad_Genero() {
+                cajaOpciones.classList.add('oculta');
+                esperandoOpciones = false;
+                colaDialogos = [
+                    { img: "TU_IMAGEN_MELODIE_NORMAL.png", txt: "Ja, estás en lo correcto. Amo el K-pop, pero es un poquito aburrido escuchar los mismos temas, ¿verdad?" },
+                    { img: "TU_IMAGEN_MELODIE_SECRETO.png", txt: "La verdad esto no lo saben mis amigos ni amigas, pero amo el Rock." },
+                    { img: "TU_IMAGEN_MELODIE_PENSATIVA.png", txt: "Aunque habitualmente lo escucho en privado para que no arruine mi imagen como idol.", showOptions: 22 }
+                ];
+                avanzarDialogo();
+            }
+
+            function iniciarGenero_Rock() {
+                cajaOpciones.classList.add('oculta');
+                esperandoOpciones = false;
+                colaDialogos = [
+                    { img: "TU_IMAGEN_MELODIE_NERVIOSA.png", txt: "Por favor, no le digas a nadie, cariño. Esto es algo que solo tú sabrás, ¿me escuchaste?", showOptions: 23 }
+                ];
+                avanzarDialogo();
+            }
+
+            function iniciarGenero_Hechicero() {
+                cajaOpciones.classList.add('oculta');
+                esperandoOpciones = false;
+                colaDialogos = [
+                    { img: "TU_IMAGEN_MELODIE_SORPRENDIDA.png", txt: "E-eh... ¿cómo que hechicero?" },
+                    { img: "TU_IMAGEN_NARRADOR.png", txt: "<i>*La miras curiosamente*</i>" },
+                    { img: "TU_IMAGEN_MELODIE_NERVIOSA.png", txt: "<i>*Aparta la mirada*</i> Está bien, está bien, no me mires así. Sí, sé que todos me shipean con él, pero no porque me guste el Rock amaré a ese tal hechicero llamado Ziggy." },
+                    { img: "TU_IMAGEN_MELODIE_COQUETA.png", txt: "Aunque igual puedo decirte que sus shows me entretienen y es imposible perderte ante sus ojos tan hermosos.", showOptions: 25 }
+                ];
+                avanzarDialogo();
+            }
+
+            function iniciarRock_Secreto() {
+                cajaOpciones.classList.add('oculta');
+                esperandoOpciones = false;
+                colaDialogos = [
+                    { img: "TU_IMAGEN_MELODIE_ALIVIADA.png", txt: `Ay, gracias, <b>${primerNombre}</b>. Ya me estaba preocupando.` },
+                    { img: "TU_IMAGEN_MELODIE_SONRIENTE.png", txt: "Eres de esas personas a las que no se le ocurre abrir la bocota como Locuras Draco.", showOptions: 24 }
+                ];
+                avanzarDialogo();
+            }
+
+            function iniciarSecreto_DracoAmigo() {
+                cajaOpciones.classList.add('oculta');
+                esperandoOpciones = false;
+                colaDialogos = [
+                    { img: "TU_IMAGEN_MELODIE_SORPRENDIDA.png", txt: "¿Tú y él también son amigos?" },
+                    { img: "TU_IMAGEN_MELODIE_PENSATIVA.png", txt: "Wow, aunque no me sorprende, él quiere ser amigo de todos." },
+                    { img: "TU_IMAGEN_MELODIE_DECEPCIONADA.png", txt: "Aunque dudo mucho que lo consiga porque comete muchas locuras por dondequiera que vaya." },
+                    { img: "TU_IMAGEN_MELODIE_CELOSA.png", txt: "Le gusta tener amigas también, y eso me molesta porque algún día alguna me lo va a quitar y no lo permitiré..." },
+                    { img: "TU_IMAGEN_NARRADOR.png", txt: "<i>*La miras un poco raro*</i>" },
+                    { img: "TU_IMAGEN_MELODIE_SONROJADA.png", txt: "<i>*Sonrojada*</i> E-eh, sí... vaya, parece que es muy tarde, cariño. Será mejor que nos veamos otro día." },
+                    { img: "TU_IMAGEN_NARRADOR.png", txt: "<i>*La miras raro pero te da igual y te despides de ella*</i>" },
+                    { img: "TU_IMAGEN_MELODIE_DESPIDIENDOSE.png", txt: `Cuídate mucho, <b>${primerNombre}</b>, y recuerda no decirle a nadie sobre mi gusto musical extra.` },
+                    { img: "TU_IMAGEN_NARRADOR.png", txt: "<b>FIN DEL CHAT:</b> Has tenido una conversación muy buena, pero a la vez impresionante.", esFinal: true }
+                ];
+                avanzarDialogo();
+            }
+
+            function iniciarHechicero_Enamorada() {
+                cajaOpciones.classList.add('oculta');
+                esperandoOpciones = false;
+                colaDialogos = [
+                    { img: "TU_IMAGEN_MELODIE_ENOJADA.png", txt: "¿De qué rayos hablas? Solo dije que tiene hermosos ojos y me gusta ver sus shows." },
+                    { img: "TU_IMAGEN_MELODIE_SERIA.png", txt: "Eso no es amor, se le llama admiración y aprecio." },
+                    { img: "TU_IMAGEN_MELODIE_ORGULLOSA.png", txt: "Ya que yo tengo un solo hombre y haré lo mejor que pueda para que él me ame por la eternidad." },
+                    { img: "TU_IMAGEN_MELODIE_DESPIDIENDOSE.png", txt: "Así que hasta aquí nos vemos, cariño. Fue un gusto conocerte." },
+                    { img: "TU_IMAGEN_NARRADOR.png", txt: "<b>FIN DEL CHAT:</b> Tuviste una conversación demasiado divertida con Melodie, pero a la vez te quedaste con dudas.", esFinal: true }
+                ];
+                avanzarDialogo();
+            }
+
+            function iniciarHechicero_Chisme() {
+                cajaOpciones.classList.add('oculta');
+                esperandoOpciones = false;
+                colaDialogos = [
+                    { img: "TU_IMAGEN_MELODIE_FURIOSA.png", txt: "No creas que escaparás y te saldrás con la tuya. <i>*Te persigue*</i>" },
+                    { img: "TU_IMAGEN_NARRADOR.png", txt: "<i>*Te atrapa y te amarra a una silla*</i>" },
+                    { img: "TU_IMAGEN_MELODIE_PSICOPATA.png", txt: "Cariño, esas cosas no se hacen. Nunca amé a ese hechicero, solo lo admiro." },
+                    { img: "TU_IMAGEN_MELODIE_SONRISA_MALA.png", txt: "Espero que aprendas tu lección y disfrutes de una larga semana encerrado." },
+                    { img: "TU_IMAGEN_MELODIE_DESPIDIENDOSE.png", txt: "Bye." },
+                    { img: "TU_IMAGEN_NARRADOR.png", txt: "<b>FIN DEL CHAT:</b> Terminaste amarrado durante 1 semana por wn, te lo mereces.", esFinal: true }
+                ];
+                avanzarDialogo();
+            }
+
+            function iniciarCuriosidad_Amor() {
+                cajaOpciones.classList.add('oculta');
+                esperandoOpciones = false;
+                colaDialogos = [
+                    { img: "TU_IMAGEN_MELODIE_NERVIOSA.png", txt: "Oye, oye, más cuidado con esa pregunta, es un tema muy personal." },
+                    { img: "TU_IMAGEN_NARRADOR.png", txt: "<i>*Traga saliva*</i>" },
+                    { img: "TU_IMAGEN_MELODIE_TIMIDA.png", txt: "Bueno, la verdad es que..." },
+                    { img: "TU_IMAGEN_MELODIE_TIMIDA.png", txt: "..." },
+                    { img: "TU_IMAGEN_MELODIE_SONROJADA.png", txt: "Sí... amo a un chico." },
+                    { img: "TU_IMAGEN_MELODIE_SONROJADA.png", txt: "O más que chico, es mi amigo, pero solo esa pista te puedo dar.", showOptions: 26 }
+                ];
+                avanzarDialogo();
+            }
+
+            function iniciarAmor_Adivinar() {
+                cajaOpciones.classList.add('oculta');
+                esperandoOpciones = false;
+                colaDialogos = [
+                    { img: "TU_IMAGEN_MELODIE_DESAFIANTE.png", txt: "Está bien, pero solo tienes 1 intento y si fallas, pues hasta aquí dejamos nuestra conversación." },
+                    { img: "TU_IMAGEN_MELODIE_COQUETA.png", txt: "Así que empieza cuando quieras.", showOptions: 27 }
+                ];
+                avanzarDialogo();
+            }
+
+            // === RUTAS DE ADIVINANZA (FASE 27) ===
+            function iniciarAdivinar_Lawrie() {
+                cajaOpciones.classList.add('oculta');
+                esperandoOpciones = false;
+                colaDialogos = [
+                    { img: "TU_IMAGEN_MELODIE_PENSATIVA.png", txt: "Un guardia súper valiente y protector." },
+                    { img: "TU_IMAGEN_MELODIE_NORMAL.png", txt: "Pero no es de mi estilo, cariño." },
+                    { img: "TU_IMAGEN_MELODIE_DESPIDIENDOSE.png", txt: `Así que hasta aquí lo dejamos, <b>${primerNombre}</b>. Bye bye.` },
+                    { img: "TU_IMAGEN_NARRADOR.png", txt: "<b>FIN DEL CHAT:</b> No lograste adivinar, vuelve para la próxima ;(", esFinal: true }
+                ];
+                avanzarDialogo();
+            }
+
+            function iniciarAdivinar_Finx() {
+                cajaOpciones.classList.add('oculta');
+                esperandoOpciones = false;
+                colaDialogos = [
+                    { img: "TU_IMAGEN_MELODIE_ENAMORADA.png", txt: "~Ay, Finx... muy lindo, perfecto y apuesto." },
+                    { img: "TU_IMAGEN_MELODIE_NORMAL.png", txt: "Aunque tampoco me gusta." },
+                    { img: "TU_IMAGEN_MELODIE_DESPIDIENDOSE.png", txt: `Solo le agradezco por los trillizos que me regaló aquella vez, así que hasta la próxima, <b>${primerNombre}</b>. Cuídate.` },
+                    { img: "TU_IMAGEN_NARRADOR.png", txt: "<b>FIN DEL CHAT:</b> No lograste adivinar, vuelve para la próxima ;(", esFinal: true }
+                ];
+                avanzarDialogo();
+            }
+
+            function iniciarAdivinar_Chester() {
+                cajaOpciones.classList.add('oculta');
+                esperandoOpciones = false;
+                colaDialogos = [
+                    { img: "TU_IMAGEN_MELODIE_PENSATIVA.png", txt: "Es simpático, pero a la vez molesto. Además, él ya tiene a su pareja, mi amiga Mandy, o eso según dicen por ahí." },
+                    { img: "TU_IMAGEN_MELODIE_BURLONA.png", txt: "¿Así que creíste que le quitaría el novio a mi amiga?" },
+                    { img: "TU_IMAGEN_MELODIE_DESPIDIENDOSE.png", txt: "Ja, nunca. Así que hasta luego." },
+                    { img: "TU_IMAGEN_NARRADOR.png", txt: "<b>FIN DEL CHAT:</b> No lograste adivinar, vuelve para la próxima ;(", esFinal: true }
+                ];
+                avanzarDialogo();
+            }
+
+            function iniciarAdivinar_Fang() {
+                cajaOpciones.classList.add('oculta');
+                esperandoOpciones = false;
+                colaDialogos = [
+                    { img: "TU_IMAGEN_MELODIE_ALEGRE.png", txt: "Guapo, poderoso y asombroso." },
+                    { img: "TU_IMAGEN_MELODIE_RISUEÑA.png", txt: "Pero a la vez un poquito tontito y chistoso es él." },
+                    { img: "TU_IMAGEN_MELODIE_NORMAL.png", txt: "Pero él no me gusta, aunque siempre lo admiro por lo cercano que es conmigo." },
+                    { img: "TU_IMAGEN_MELODIE_FELIZ.png", txt: "Además, prepara ricos asados y hace buenas fiestas." },
+                    { img: "TU_IMAGEN_MELODIE_DESPIDIENDOSE.png", txt: "Así que cariño, no adivinaste, por lo que hasta aquí terminamos. ¡Cuídate mucho y saludos!" },
+                    { img: "TU_IMAGEN_NARRADOR.png", txt: "<b>FIN DEL CHAT:</b> No lograste adivinar, vuelve para la próxima ;(", esFinal: true }
+                ];
+                avanzarDialogo();
+            }
+
+            function iniciarAdivinar_Draco() {
+                cajaOpciones.classList.add('oculta');
+                esperandoOpciones = false;
+                colaDialogos = [
+                    { img: "TU_IMAGEN_MELODIE_LOCA_ENAMORADA.png", txt: "¡¡~Kyaaa, Locuras Draco!!" },
+                    { img: "TU_IMAGEN_MELODIE_OJOS_CORAZON.png", txt: "Mi vida brilla cada vez que pienso en mi Draco." },
+                    { img: "TU_IMAGEN_NARRADOR.png", txt: "<i>*Le repites de nuevo 'Locuras Draco'*</i>" },
+                    { img: "TU_IMAGEN_MELODIE_TIERNA.png", txt: "Aaaay ya para, ya para. <i>*Sonríe tiernamente*</i>" },
+                    { img: "TU_IMAGEN_MELODIE_ENAMORADA.png", txt: "Adivinaste, él es mi amor y mi deseo.", showOptions: 28 }
+                ];
+                avanzarDialogo();
+            }
+
+            // === RUTAS DEL AMOR POR DRACO ===
+            function iniciarDraco_Amigo() {
+                cajaOpciones.classList.add('oculta');
+                esperandoOpciones = false;
+                colaDialogos = [
+                    { img: "TU_IMAGEN_MELODIE_ENAMORADA.png", txt: "Locuras Draco es mi amor, mi vida, mi motivación." },
+                    { img: "TU_IMAGEN_MELODIE_ENOJADA.png", txt: "Pero a la vez me hace enojar y me molesta." },
+                    { img: "TU_IMAGEN_MELODIE_COMPRENSIVA.png", txt: "Aunque eso es parte de él, y yo lo entiendo más que a nadie en este universo." },
+                    { img: "TU_IMAGEN_MELODIE_DECIDIDA.png", txt: "¡¡Por eso debería ser su novia, porque no me importa todo lo que me haga, siempre le serviré y lo seguiré a dondequiera que vaya!!" },
+                    { img: "TU_IMAGEN_NARRADOR.png", txt: "<i>*La miras algo raro*</i>" },
+                    { img: "TU_IMAGEN_MELODIE_NERVIOSA.png", txt: "..." },
+                    { img: "TU_IMAGEN_MELODIE_RISA_NERVIOSA.png", txt: "Bueno, creo que fue mucho por hoy, jsjs." },
+                    { img: "TU_IMAGEN_MELODIE_DESPIDIENDOSE.png", txt: "Nos vemos, cariño, ¡¡cuídate mucho!! Y no le digas a mi Draco." },
+                    { img: "TU_IMAGEN_NARRADOR.png", txt: "<b>FIN DEL CHAT:</b> Has tenido una charla chistosa y emotiva con Melodie.", esFinal: true }
+                ];
+                avanzarDialogo();
+            }
+
+            function iniciarDraco_Conquistar() {
+                cajaOpciones.classList.add('oculta');
+                esperandoOpciones = false;
+                colaDialogos = [
+                    { img: "TU_IMAGEN_MELODIE_FELIZ.png", txt: `Muchas gracias, <b>${primerNombre}</b>. Y sí, sé muchas cosas de Locuras Draco.` },
+                    { img: "TU_IMAGEN_MELODIE_CURIOSA.png", txt: "¿Qué te gustaría saber de él?", showOptions: 29 }
                 ];
                 avanzarDialogo();
             }
