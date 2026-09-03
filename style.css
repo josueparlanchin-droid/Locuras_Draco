@@ -116,9 +116,11 @@ select {
     display: block;
     height: auto;
     padding-top: 50px;
+    overflow-x: hidden;
 }
 
 .cabecera-bienvenida {
+    flex: 0 0 100%;
     text-align: center;
 }
 
@@ -137,18 +139,23 @@ select {
 
 /* Nuevo contenedor principal para posicionar bien el chat */
 .contenedor-principal-inicio {
-    position: relative;
-    max-width: 1200px;
+    max-width: 1400px;
     margin: 0 auto;
-    padding-bottom: 50px;
+    padding: 0 20px 50px 20px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 30px;
 }
 
-/* Temporadas centradas a la perfección */
+/* Temporadas centradas */
 .contenedor-temporadas-centro {
     display: flex;
     justify-content: center;
     gap: 40px;
-    margin-top: 40px;
+    flex: 1;
+    min-width: 0;
 }
 
 .tarjeta-temporada {
@@ -203,13 +210,11 @@ select {
     background-color: #d1304b;
 }
 
-/* Panel de chat flotando a la derecha (Grilla 3x3) */
+/* Panel de chat a la derecha */
 .panel-chat-cuadricula {
-    position: absolute;
-    right: -250px;
-    top: 100px;
-    width: 360px;
+    width: 300px;
     text-align: center;
+    flex-shrink: 0;
 }
 
 .titulo-chats {
@@ -312,12 +317,11 @@ select {
 /* =========================================
    PANEL IZQUIERDO (SLIDER DE IMÁGENES)
    ========================================= */
+/* Panel izquierdo (Slider de imágenes) */
 .panel-slider-izquierdo {
-    position: absolute;
-    left: -280px;
-    top: 100px;
-    width: 450px;
+    width: 350px;
     text-align: center;
+    flex-shrink: 0;
 }
 
 .titulo-slider {
@@ -508,4 +512,174 @@ select {
 
 .btn-opcion-vn b {
     color: #fffde7; /* Nombre del usuario en color cremita para que resalte */
+}
+
+/* =========================================
+   5. MEDIA QUERIES (RESPONSIVE)
+   ========================================= */
+
+/* Tablets y pantallas medianas */
+@media (max-width: 1200px) {
+    .contenedor-principal-inicio {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .panel-slider-izquierdo {
+        width: 90%;
+        max-width: 500px;
+        order: -1;
+    }
+
+    .cabecera-bienvenida {
+        order: 0;
+    }
+
+    .contenedor-temporadas-centro {
+        order: 1;
+        flex-wrap: wrap;
+    }
+
+    .panel-chat-cuadricula {
+        order: 2;
+        width: 90%;
+        max-width: 400px;
+    }
+
+    .grilla-chats {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .perfil-usuario-top {
+        position: fixed;
+        top: 10px;
+        right: 10px;
+        padding: 6px 12px;
+        gap: 8px;
+        z-index: 100;
+    }
+
+    .perfil-usuario-top span {
+        font-size: 0.8rem;
+    }
+
+    .perfil-usuario-top img {
+        width: 35px;
+        height: 35px;
+    }
+}
+
+/* Móviles */
+@media (max-width: 768px) {
+    .cabecera-bienvenida h1 {
+        font-size: 1.5rem;
+    }
+
+    .cabecera-bienvenida p {
+        font-size: 1rem;
+        margin-bottom: 20px;
+    }
+
+    .contenedor-temporadas-centro {
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+    }
+
+    .tarjeta-temporada {
+        width: 90%;
+        max-width: 350px;
+    }
+
+    .panel-slider-izquierdo {
+        width: 95%;
+    }
+
+    .panel-chat-cuadricula {
+        width: 95%;
+    }
+
+    .grilla-chats {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    /* Chat VN responsive */
+    .contenedor-app-vn {
+        height: 100vh;
+        border-radius: 0;
+        margin-top: 0;
+    }
+
+    .caja-dialogo-vn {
+        width: 95%;
+        padding: 10px 15px;
+        gap: 10px;
+    }
+
+    .caja-dialogo-vn p {
+        font-size: 1rem;
+    }
+
+    .icono-mini-dialogo {
+        width: 50px;
+        height: 50px;
+    }
+
+    .zona-opciones-vn {
+        width: 95%;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .btn-opcion-vn {
+        min-width: 100%;
+        padding: 12px;
+        font-size: 0.85rem;
+    }
+
+    .cabecera-chat h2 {
+        font-size: 1rem;
+    }
+
+    .btn-volver {
+        font-size: 0.8rem;
+        padding: 6px 10px;
+    }
+
+    .sprite-centro {
+        max-height: 500px;
+    }
+}
+
+/* Muy pequeños */
+@media (max-width: 480px) {
+    .cabecera-bienvenida h1 {
+        font-size: 1.2rem;
+    }
+
+    .perfil-usuario-top {
+        top: 5px;
+        right: 5px;
+        padding: 4px 10px;
+        gap: 6px;
+    }
+
+    .perfil-usuario-top span {
+        font-size: 0.7rem;
+    }
+
+    .perfil-usuario-top img {
+        width: 30px;
+        height: 30px;
+    }
+
+    .grilla-chats {
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+    }
+
+    .foto-cuadrada-mini {
+        width: 60px;
+        height: 60px;
+    }
 }
